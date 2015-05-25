@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+{%- block title -%}
+{{ _("user signup") }}
+{%- endblock -%}
+
+{% from "macros/_forms.html" import render_errors %}
+
+{%- block entity %}
+<style type="text/css">
+    form th {
+        color: #666666;
+        font-weight: normal;
+        padding: 10px;
+        text-align: right;
+    }
+    .form-table input {
+        padding: 3px;
+    }
+    .title{padding-left: 20px;}
+    textarea{width: 312px;padding: 3px;}
+    #real-avatar .avatar {
+        background: none repeat scroll 0 0 #FFFFFF;
+        border: 1px solid #DDDDDD;
+        float: right;
+        margin-right: 20px;
+        padding: 2px;
+    }
+</style>
+<div class="">
+<div class="top">
+    <h2 class="title">欢迎加入{{ config.SITE_NAME }}，如已有账户请点击<a href="/account/login">这里</a>登录</h2>
+</div>
+
+<div id="sign" class="inner">
+    <div class="cancel-comment-reply">
+        <div id="real-avatar">
+            <img width="73" height="73" class="avatar avatar-73 photo avatar-default" src="http://0.gravatar.com/avatar/s=73" alt="">	</div>
+    </div>
+    <form method="POST" action=""  class="w700 fn-left">
+        {{ form.hidden_tag() }}
+        <table cellspacing="0" class="form-table">
+        <tbody>
+            <tr>
+                <th  width="60">{{ form.email.label }}</th>
+                <td>
+                    {{ form.email(size=30) }} {{ render_errors(form.email) }}
+                    
+                </td>
+            </tr>
+			<tr>
+                <th></th>
+                <td class="t1">
+                     请填写真实有效的邮箱，便于激活您的帐号；<br/>
+                     本站采用Gravatar头像，也就是说：输入邮箱便生成头像； <a href="http://cn.gravatar.com/" target="_blank" style="color: blue;" title="申请一个自己的Gravatar全球通用头像" id="Get_Gravatar">申请自己的个性头像</a>；
+               </td>
+            </tr>
+            <tr>
+                <th>{{ form.username.label }}</th>
+                <td>
+                    {{ form.username(size=20) }} {{ render_errors(form.username) }}
+					
+                </td>
+            </tr>
+			<tr>
+                <th></th>
+                <td class="t1">全站唯一，注册后不能修改，允许3-20个英文字母、数字和符号.-_。</td>
+            </tr>
+            <tr>
+                <th>{{ form.password.label }}</th>
+                <td>
+                    {{ form.password(size=30) }} {{ render_errors(form.password) }}
+					
+                </td>
+            </tr>
+            <tr>
+                <th>{{ form.password_again.label }}</th>
+                <td>{{ form.password_again(size=30) }} {{ render_errors(form.password_again) }}</td>
+            </tr>
+            <tr>
+                <th>{{ form.gender.label }}</th>
+                <td>{{ form.gender }} {{ render_errors(form.gender) }}</td>
+            </tr>
+            <tr>
+                <th>{{ form.recaptcha.label }}</th>
+                <td>
+                    {{ form.recaptcha(size=5) }} {{ render_errors(form.recaptcha) }}
+                    <img id="captcha" src="{{ url_for('misc.validate_code') }}" align="top" alt="验证码"
+                         onclick="this.src='{{ url_for('misc.validate_code') }}?' + new Date().getTime();this.blur();"
+                         style="cursor:pointer;"/>
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td>{{ form.submit }}</td>
+            </tr>
+        </tbody>
+        </table>
+    </form>
+
+    <div class="fn-clear"></div>
+</div>
+</div>
+{%- endblock %}
+{%- block sidebar %}
+        <div class="box">
+            <ul>
+<li  class="dot1">很多邮件服务商（包括 gmail、qq 等）会把 {{ config.SITE_NAME }} 发送的邮件识别为垃圾邮件；</li><br />
+<li  class="dot1">如果您没有收到 {{ config.SITE_NAME }} 发送的邮件，请注意查看邮箱中的垃圾邮件；</li><br />
+<li  class="dot1">为了便于使用，请将来自 {{ config.SITE_NAME }} 的邮件设置成不是垃圾邮件，或者加为联系人，以便接受本站邮件；</li><br />
+<li  class="dot1">如果您使用163邮箱，那么验证邮件可能在订阅邮件列表中。</li><br />
+            </ul>
+        </div>
+{%- endblock %}
+{%- block js %}
+{{ super() }}
+
+
+<script src="{{ url_for('static', filename='js/md5-min.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(function(){
+        $('#email').blur(function(){
+            $('#real-avatar .avatar').attr('src','http://www.gravatar.com/avatar/' + hex_md5($('#email').val())) + '?d=mm&s=73';
+        });
+        $('#captcha').attr('src','/misc/validate_code/?' + new Date().getTime());
+
+
+    });
+</script>
+{%- endblock %}

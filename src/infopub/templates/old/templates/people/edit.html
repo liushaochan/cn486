@@ -1,0 +1,68 @@
+{% extends "people/layout.html" %}
+{%- block title -%}
+{{ _("modify users data") }}
+{%- endblock -%}
+{% from "macros/_forms.html" import render_errors %}
+
+{%- block entity %}
+<style type="text/css">
+    form th {
+        color: #666666;
+        font-weight: normal;
+        padding: 10px;
+        text-align: right;
+    }
+    form input {
+        padding: 3px;
+    }
+    .title{padding-left: 110px;}
+    textarea{width: 312px;padding: 3px;}
+
+</style>
+<script type="text/javascript" src="{{ url_for('static', filename='900u/js/avatar.js') }}"></script>
+<div id="tab"></div>
+
+<div id="users" class="box" style="position: relative;">
+    <img id="imgface" style="position: absolute;right: 10px;top:40px;" name="imgface" src="/static/avatar/default50.png" />
+    <div class="top"><h2 class=""><a href="{{ url_for('portal.index') }}">{{ _('Home') }}</a>&nbsp;  > {{ _("modify users data") }}</h2></div>
+
+<form method="POST" action=".">
+    {{ form.hidden_tag() }}
+	<table cellspacing="0" class="form-table">
+	<tbody>
+    		<tr>
+    			<th>{{ form.nickname.label }}</th>
+        		<td>{{ form.nickname(size=20) }} {{ render_errors(form.nickname) }}</td>
+    		</tr>
+    		<tr>
+    			<th>{{ form.homepage.label }}</th>
+        		<td>{{ form.homepage(size=50) }} {{ render_errors(form.homepage) }}</td>
+    		</tr>
+
+    		<tr>
+    			<th>{{ form.avatar.label }}</th>
+        		<td>{{ form.avatar }} {{ render_errors(form.avatar) }}</td>
+    		</tr>
+
+            <tr>
+    			<th>{{ form.gender.label }}</th>
+        		<td>{{ form.gender }} {{ render_errors(form.gender) }}</td>
+    		</tr>
+    		<tr>
+    			<th>{{ form.bio.label }}<br/>不超过100字</th>
+        		<td>{{ form.bio(size=200) }} {{ render_errors(form.bio) }}</td>
+    		</tr>
+    		<tr>
+    			<th>{{ form.interest.label }}<br/>用逗号隔开</th>
+        		<td>{{ form.interest }} {{ render_errors(form.interest) }}</td>
+    		</tr>
+        <tr>
+            <th></th>
+            <td>{{ form.submit }}<br/><br/><br/></td>
+        </tr>
+	</tbody>
+	</table>
+</form>
+</div>
+
+{%- endblock %}

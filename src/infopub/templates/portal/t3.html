@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="{{ assets('jquery/jquery-1.10.2.min.js') }}"></script>
+  <script src="{{ assets('play/flowplayer-3.0.0.min.js') }}"></script>
+</head>
+<body>
+<div class="video">
+  <script type="text/javascript">
+    var player = flowplayer("player1", "{{ assets('play/flowplayer-3.0.0.swf') }}", { clip: { autoPlay: false, autoBuffering: false } });
+</script>
+  <a style="display: block; width: 348px; height: 263px;" onclick="player.play()" id="player1" href="http://www.beidou.gov.cn/video/2014/05/20/20140520ce39a10b0c6e4b208df91e75e886be54.flv.flv">
+    <img src="http://www.beidou.gov.cn/attach/2014/05/20/2014052003173b2706414f318a8dbca3843caa9a.jpg" id="bg">
+  </a>
+</div>
+
+
+</body>
+</html>

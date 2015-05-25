@@ -1,0 +1,36 @@
+{% extends ("layout.html") %}
+{%- block title -%}
+{{ _("批量账号附加") }}
+{%- endblock -%}
+{% from "macros/_forms.html" import render_errors %}
+
+{%- block entity %}
+
+<style type="text/css">
+    form th {
+        color: #666666;
+        font-weight: normal;
+        padding: 10px;
+        text-align: right;
+    }
+    form input {
+        padding: 3px;
+    }
+    .title{padding-left: 110px;}
+    textarea{width: 99%;height:300px;padding: 3px;}
+
+</style>
+
+<div id="users" class="">
+<h2 class="top"><a href="{{ url_for('portal.index') }}">首页</a>&nbsp;> {{ _("批量账号附加") }}</h2>
+    <div class="inner">
+        <form method="POST" action=".">
+            {{ form.hidden_tag() }}
+            {{ form.email_list.label }}
+            {{ form.email_list }} {{ render_errors(form.email_list) }}
+            {{ form.submit }}
+        </form>
+    </div>
+</div>
+
+{%- endblock %}

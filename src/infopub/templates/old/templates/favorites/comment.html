@@ -1,0 +1,32 @@
+{% extends "favorites/layout.html" %}
+
+{%- block entity_data %}
+<article id="favorites"  class="w700 fn-left">
+    {%- if favorites_list %}
+    {%- for favorites in favorites_list %}
+    <section id="favorites-{{ favorites._id }}" class="favorites fn-clear">
+        <div class="list-info w640 ">
+            {% if favorites.entry_type == 0 %}
+            <a href="{{ url_for('articles.show', id=favorites.entry_id) }}" class="">{{ favorites.title }}</a>|{{ favorites.description }}
+            {% elif favorites.entry_type == 1 %}
+            <a href="{{ url_for('news.show', id=favorites.entry_id) }}" class="">{{ favorites.title }}</a>|{{ favorites.description }}
+            {% elif favorites.entry_type == 4 %}
+            <a href="{{ url_for('forums.show', id=favorites.entry_id) }}" class="">{{ favorites.title }}</a>|{{ favorites.description }}
+            {% elif favorites.entry_type == 5 %}
+            <a href="{{ url_for('questions.show', id=favorites.entry_id) }}" class="">{{ favorites.title }}</a>|{{ favorites.description }}
+            {% elif favorites.entry_type == 10000 %}
+            <a href="{{ url_for('comment.show', id=favorites.entry_id) }}" class="">{{ favorites.title }}</a>|{{ favorites.description }}
+            {% endif %}
+            | <a href="{{ url_for('favorites.cancel', id=favorites._id) }}" class="">{{ _('Cancel favorites') }}</a>
+        </div>
+    </section>
+    {% endfor %}
+    {%- else %}
+    <p>{{ _("Nobody's posted anything yet.") }}</p>
+    {%- endif %}
+</article>
+
+{% if page_total > 1 %}
+{{ more }}
+{% endif %}
+{% endblock%}

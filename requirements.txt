@@ -1,0 +1,126 @@
+# 测试
+nose
+#Flask-Testing
+#factory-boy>=2.2.1
+Flask-WebTest
+
+# 管理脚本
+Flask-Script
+
+# 调试条
+Flask-DebugToolbar
+
+# Flask
+Flask>=0.10.1
+Flask-Session
+MarkupSafe>=0.18
+Werkzeug>=0.9.4
+Jinja2>=2.7.1
+itsdangerous>=0.23
+
+# 数据库ORM
+Flask-SQLAlchemy>=1.0
+SQLAlchemy>=0.8.6
+
+# 数据迁移
+Flask-Migrate>=1.0.0
+
+# 表单
+Flask-WTF>=0.9.4
+WTForms>=1.0.5
+WTForms-Alchemy
+#https://github.com/kvesteri/wtforms-alchemy.git
+#http://wtforms-alchemy.readthedocs.org/en/latest/
+
+# web 服务器
+#wsgiref>=0.1.2
+
+# css js 合并
+Flask-Assets>=0.8
+cssmin>=0.1.4
+jsmin>=2.0.4
+
+# 用户认证
+Flask-Login>=0.2.7
+Flask-Bcrypt>=0.5.2
+Flask_Principal>=0.4.0
+Flask_Security>=1.6.9
+
+# 缓存
+Flask-Cache>=0.12
+
+# 国际化显示
+Babel
+Flask-BabelEx
+#http://pythonhosted.org/Flask-Babel/
+#https://github.com/mrjoes/flask-babelex
+
+# Flask 扩展
+# 邮件发送
+Flask-Mail
+
+# 管理端
+Flask-Admin
+
+# RESTFul Api
+Flask-Restless
+# https://flask-restless.readthedocs.org/en/latest/
+
+# 文件上传
+Flask-Uploads
+
+# 通过邮件发生日志
+mailinglogger
+
+# 图像处理
+Pillow
+
+# 对象序列化
+msgpack-python
+
+# markdown
+misaka
+Flask-Misaka
+#https://flask-misaka.readthedocs.org/en/latest/
+
+# 代码高亮
+Pygments
+
+# Python SSH 模块
+paramiko
+#<=1.12.3
+
+# 自动部署
+Fabric
+
+# 基于Fabric像Chef风格的自动部署
+#cuisine
+
+# ujson 中文支持差？
+
+# 基于redis的队列模块
+rq
+
+redis
+
+# redis的flask插件
+Flask-And-Redis
+
+# Gravatar头像显示
+Flask-Gravatar
+
+# 更好的显示日期、货币等
+humanize
+arrow
+
+# oauth
+# https://pypi.python.org/pypi/Flask-Social/1.6.2
+# http://pythonhosted.org/Flask-Social/
+#flask-paginate
+# Flask-OpenID
+
+anyjson
+
+# runkit
+
+exifread

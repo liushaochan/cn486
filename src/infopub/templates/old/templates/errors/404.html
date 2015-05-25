@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{%- block title -%}
+{{ _("404, Page Not Found") }}
+{%- endblock -%}
+
+{% block entity %}
+<div class="error">
+    <h1>{{ _("404, Page Not Found") }}</h1>
+    <blockquote>
+        <p>{{ _("The requested page, cannot be found") }}</p>
+    </blockquote>
+    <div class="simple">
+        <p>{{ _("Maybe you can try search:") }}</p>
+        <!-- 百度自定义搜索 -->
+        <SCRIPT language=javascript>
+            function g(formname)	{
+                var url = "http://www.baidu.com/baidu";
+                formname.ct.value = "2097152";
+                formname.action = url;
+                return true;
+            }
+        </SCRIPT>
+        <div class="search">
+            <form name="f1" onsubmit="return g(this)">
+
+                <input name=word size="30" maxlength="100"  placeholder="输入 回车搜索" >
+                <input name=tn type=hidden value="bds">
+                <input name=cl type=hidden value="3">
+                <input name=ct type=hidden>
+                <input name=si type=hidden value="www.900u.com">
+                <input name=ie type=hidden value=utf-8>
+
+            </form>
+        </div>
+        <!-- 百度自定义搜索 -->
+    </div>
+</div>
+{%- endblock -%}

@@ -1,0 +1,147 @@
+{% extends ("layout.html") %}
+
+{%- block title -%}
+{{ current_category.meta_title }}
+{%- endblock -%}
+{% block site_description %}{{ current_category.meta_description }}{%- endblock -%}
+{% block site_keywords %}{{ current_category.meta_keywords }}{%- endblock -%}
+
+{%- block position %}
+
+	<h2 >
+        <a href="{{ url_for('portal.index') }}">{{ config.SITE_NAME }}</a>&nbsp;
+        <em>
+        {% if current_category %}
+        {% for p in current_category.path %}
+        >  {{ p.category_name }} ({{ p.num_entries }})
+        {% endfor %}
+        {% endif %}
+        {% if current_tag %}
+        || {{ _("Tags") }} » {{ current_tag.tag_name }}
+        {% endif %}
+        </em>
+	</h2>
+	
+
+{% include "question/_postnow.html" %}
+{%- endblock %}
+
+{%- block lsidebar %} 
+
+<aside class="left-aside left">
+		<div class="categories">
+			<ul class="heading_tabs">
+				<li class="category0"><a  class="{% if not current_category %}current{% endif %}"  href="{{ url_for('question.index') }}">{{ _('All') }}</a><li>
+				{%- for category in categories -%}
+				<li class="category{{ category.id }}"><a  class="{% if current_category == category.id %}current{% endif %}"  href="{{ url_for('question.index', category_id=category.id) }}">{{ category.category_name }}</a><li>
+				{%- endfor -%}
+			</ul>
+		</div>
+</aside>
+{%- endblock %}
+
+{%- block entity %}
+
+    {%- if entries_list %}
+    {%- for entry in entries_list %}
+
+    <div id="entries-{{ entry.id }}" class="question-summary narrow list">
+        <div class="cp left" >
+            <div class="votes">
+
+                    <span class="vote-count-post"><strong>0</strong></span>
+                    <div class="viewcount">投票</div>
+
+            </div>
+            <div class="status unanswered">
+                <span class="status-count-post"><strong>{{ entry.num_comments }}</strong></span>
+                <div class="viewcount">答案</div>
+            </div>
+
+            <div title='{{ entry.num_views }} {{ _("Views") }}' class="views">
+                {{ entry.num_views }}
+                <div class="viewcount">{{ _("Views") }}</div>
+            </div>
+        </div>
+
+
+
+        <div class="list-info left">
+            <h1 class=""><a href="{{ url_for('portal.entry', slug=entry.slug) }}">{{ entry.title }}</a></h1>
+
+            <div class="post-data">
+            <a href="{{ url_for('people.index', username=entry.author.username, page=1) }}">{{ entry.author.nickname }}</a> {{ _("Posted at") }}
+
+                {%- if entry.updated_time %}
+                <span><abbr title="{{ entry.updated_time|local_datetime }}" class="time">{{ entry.updated_time|timesince }}</abbr></span>
+                {%- else %}
+                <abbr title="{{ entry.created_time|local_datetime }}" class="time">{{ entry.created_time|timesince }}</abbr>
+                {%- endif %}
+        {%- if entry.last_comment_id %}
+        &nbsp;•&nbsp; 最后回复来自 <strong><a href="{% if entry.last_comment.author %}{{ url_for('people.index', username=entry.last_comment.author.username) }}{% else %}{{ entry.last_comment.homepage }}{% endif %}" rel="external nofollow">{{ entry.last_comment.nickname }}</a></strong></span>
+        {%- endif %}
+
+            {%- if entry.tags -%}
+            <div class="tags right">
+                {%- for tag in entry.tags_list -%}
+                <a href="{{ url_for('portal.tag', category=current_category.slug, tag=tag.slug) }}">{{ tag.tag_name }}</a>{{ ' ' if not loop.last }}
+                {%- endfor -%}
+            </div>
+            {% endif %}
+
+
+            {% if g.user.is_supervisor %}
+                {% if entry.on_portal %}
+                    <a id="entries_on_portal_{{ entry.id }}" name="{{ url_for('entry.on_portal', id=entry.id, enable=0) }}" class="nfsno" href="javascript:void(0);"  >{{ _("On Portal") }}</a>
+                {% else %}
+                    <a id="entries_cancel_portal_{{ entry.id }}" name="{{ url_for('entry.on_portal', id=entry.id, enable=1) }}" class="nfsno" href="javascript:void(0);"  >{{ _("Cancel Portal") }}</a>
+                {% endif %}
+
+                {% if entry.on_top %}
+                    <a id="entries_on_top_{{ entry.id }}" name="{{ url_for('entry.on_top', id=entry.id, enable=0) }}" class="nfsno" href="javascript:void(0);"  >{{ _("On Top") }}</a>
+                {% else %}
+                    <a id="entries_cancel_top_{{ entry.id }}" name="{{ url_for('entry.on_top', id=entry.id, enable=1) }}" class="nfsno" href="javascript:void(0);"  >{{ _("Cancel Top") }}</a>
+                {% endif %}
+
+                {% if entry.permissions.can_edit %}
+                    <a href="{{ url_for('entry.edit', id=entry.id) }}" class="sb vh"  >{{ _("Edit") }}</a>
+                {% endif %}
+
+                {% if entry.permissions.can_del %}
+                    <a href="#" onclick="$('#delete-entries-{{ entry.id }}').toggle(); return false;" class="sb vh">{{ _("Delete") }}</a>
+                    <div id="delete-entries-{{ entry.id }}" style="display:none;">
+                        <strong>{{ _('Are you sure you want to delete this question ?') }}</strong>
+                        <a href="#" onclick='ajax_post("{{ url_for('entry.delete', id=entry.id) }}"); return false;' >{{ _('Yes') }}</a> /
+                        <a href="#" onclick="$('#delete-entries-{{ entry.id }}').toggle(); return false;">{{ _('No') }}</a>
+                    </div>
+                {% endif %}
+            {% endif %}
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+    {%- else %}
+    <p>{{ _("Nobody's posted anything yet.") }}</p>
+    {%- endif %}
+    {% if page_total > 1 %}
+    <div class="page_url">
+        {% for page_url in page_href(url_for('portal.category',category=current_category.slug), page_total, current_page) %}
+        {{ page_url|safe }}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
+
+{%- endblock %}
+{%- block sidebar %}    
+
+
+    {% include "question/_tags.html" %}
+    {% include "question/_weekly.html" %}
+    {% include "question/_monthly.html" %}
+    {% include "question/_latest_comment.html" %}
+	
+
+{%- endblock %}

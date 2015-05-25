@@ -1,0 +1,143 @@
+{% extends ("layout.html") %}
+
+{%- block title -%}
+{{ config.SITE_SUBTITLE }}
+{%- endblock -%}
+{% block site_description %}{{ config.SITE_DESCRIPTION }}{%- endblock -%}
+{% block site_keywords %}{{ config.SITE_KEYWORDS }}{%- endblock -%}
+
+{%- block entity %}
+
+
+{%- if entries_list %}
+{%- for entry in entries_list %}
+    <div class="list container-fluid" id="entries-{{ entry.id }}" >
+
+        <div class="span1">
+            <a href="{{ url_for('people.index', username=entry.author.username) }}" class="">
+                <img class="img-circle img-polaroid" src="{{ entry.author.email|gravatar(size=50) }}" alt="{{ entry.author.nickname }}"/>
+            </a>
+        </div>
+
+        <div class="span11">
+        {% if entry.entry_status != 3 %}
+        <h3 class="" style="margin-right:30px; "><a href="{{ url_for('portal.entry', slug=entry.slug) }}">等待审核中......</a></h3>
+        {% else %}
+        <h3 class="" style="margin-right:30px; "><a href="{{ url_for('portal.entry', slug=entry.slug) }}">{{ entry.title }}</a></h3>
+        {% endif %}
+
+        <span class="post-data">
+
+            &nbsp;•&nbsp; <strong><a href="{{ url_for('people.index', username=entry.author.username) }}">{{ entry.author.nickname }}</a></strong> &nbsp;•&nbsp;
+            {%- if entry.published_time %}
+            <span><abbr title="{{ entry.published_time|local_datetime }}" class="time">{{ entry.published_time|timesince }}</abbr></span>
+            {%- else %}
+            <abbr title="{{ entry.updated_time|local_datetime }}" class="time">{{ entry.updated_time|timesince }}</abbr>
+            {%- endif %}
+
+        {%- if entry.last_comment_id %}
+        &nbsp;•&nbsp; 最后回复来自 <strong><a href="{% if entry.last_comment.author %}{{ url_for('people.index', username=entry.last_comment.author.username) }}{% else %}{{ entry.last_comment.homepage }}{% endif %}" rel="external nofollow">{{ entry.last_comment.nickname }}</a></strong></span>
+        {%- endif %}
+        {%- if entry.tags -%}
+        <div class="tags pull-right" >
+            {%- for tag in entry.tags_list -%}
+               <a class="tag" href="{{ url_for('portal.tagged', slug=tag.slug) }}" title="共有{{ tag.num_entries }}个{{ tag.tag_name }}话题">{{ tag.tag_name }}</a>
+            {%- endfor -%}
+        </div>
+        {% endif %}
+        <a class="count_livid" href="{{ url_for('portal.entry', slug=entry.slug) }}#comments">{{ entry.num_comments }} 回复</a>
+            </div>
+    </div>
+
+
+    {% endfor %}
+    {%- else %}
+    <p>{{ _("Nobody's posted anything yet.") }}</p>
+    {%- endif %}
+
+    {% if page_total > 1 %}
+    <div class="pagination"><ul>
+        {% for page_url in page_href(url_for('portal.entrytype', type= type), page_total, current_page) %}
+        {{ page_url|safe }}
+        {% endfor %}
+    </ul></div>
+    {% endif %}
+
+
+{%- endblock %}
+
+{%- block sidebar %}    
+<div class="box">
+    <div class="title">
+        <strong>最新标签</strong>
+    </div>
+
+    <div >
+    {% for tag in hot_tags(None) %}
+        <a class="tag" href="{{ url_for('portal.tagged', slug=tag.slug) }}" title="共有{{ tag.num_entries }}个{{ tag.tag_name }}话题">{{ tag.tag_name }}</a>
+    {% endfor %}
+    </div>
+
+</div>
+<div class="box">
+    <div class="title">
+        <strong>最热话题</strong>
+    </div>
+
+    <div class="article-popular">
+
+    {% if hot_entries %}
+    <table border="0" width="100%">
+    {% for hot_entry in hot_entries() %}
+    <tr class="clear" style="border-bottom: 1px dotted #ccc;">
+         <td valign="middle" ><i class="icon-fire trans"></i>
+    <a href="{{ url_for('portal.entry', slug=hot_entry.slug) }}" title="{{ hot_entry.title }}">{{ hot_entry.title|cutOff20 }}</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </table>
+    {% endif %}
+
+</div>
+</div>
+
+        <div class="box">
+            <div class="title">
+                <strong>最新回复</strong>
+            </div>
+
+    <div class="article-popular">
+        {% if latest_comments %}
+        <table border="0" width="100%">
+            {% for comment in latest_comments %}
+            <tr class="clear" style="border-bottom: 1px dotted #ccc;">
+                <td valign="middle" ><i class="icon-bullhorn trans"></i>
+                <a href="{{ url_for('portal.entry', slug=comment.entry.slug) }}#comment-{{ comment.id }}" title="{{ comment.comment|html_to_text }}">{{ comment.comment|html_to_text|cutOff20 }}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        {% endif %}
+    </div>
+    </div>
+{%- endblock %}
+{%- block js %}
+{{ super() }}
+<script src="{{ url_for('static', filename='360/js/lib/jquery/nfsbyajax.js') }}" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    $(function(){
+        $(".nfs").NFSbyAjax({isModifyNum:false});
+    });
+
+
+
+
+</script>
+
+
+
+
+{%- endblock %}

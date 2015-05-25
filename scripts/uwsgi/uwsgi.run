@@ -1,0 +1,13 @@
+#!/bin/sh
+
+if [ -e /tmp/ccblog.sock ]; then
+    rm /tmp/ccblog.sock
+fi
+if [ ! -d /var/www/ccblog/ccblog/logs ]; then
+    mkdir /var/www/ccblog/ccblog/logs
+fi
+chown -R www-data.www-data /var/www/ccblog
+chmod +r /var/www/ccblog/ccblog/logs
+
+uwsgi --ini /var/www/ccblog/uwsgi/uwsgi.ini
+chmod +r /var/log/uwsgi/ccblog.log

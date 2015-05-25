@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+
+{% from "macros/_forms.html" import render_errors %}
+
+{%- block position %}
+<div id="user">
+    <div class="avatar fn-left"><img src="{{ people.email|gravatar(size=50) }}" alt="{{ people.nickname }}" /><h3>{{ people.nickname }}</h3></div>
+    <div class="info fn-left">
+
+        <p>{{ _("Joined in") }}:{{ people.created_time }}</p>
+        <div class="d-line"></div>
+        <p class="user-intro">个人介绍：{{ people.bio }}</p>
+    </div>
+    <div class="fn-clear"></div>
+</div>
+
+{%- endblock %}
+
+
+{%- block entity %}
+<div class="entries  box" >
+    <div class="top">
+        <h2 class="title ">
+            <a href="{{ url_for('portal.index') }}">{{ _('Home') }}</a>&nbsp;  > 我的收藏
+        </h2>
+
+        <div id="tabs">
+            {% if people.nickname == g.user.nickname %}
+            <a href="{{ url_for('people.favorites_index', username=people.username, page=1) }}" {% if current_entry_type == 'latest' %} class="current" {% endif %}>{{ _("Latest") }}</a>
+            <a href="{{ url_for('people.favorites_news', username=people.username, page=1) }}" {% if current_entry_type == 'news' %} class="current" {% endif %}>{{ _("News") }}</a>
+            <a href="{{ url_for('people.favorites_article', username=people.username, page=1) }}" {% if current_entry_type == 'article' %} class="current" {% endif %}>{{ _("Article") }}</a>
+            <a href="{{ url_for('people.favorites_forum', username=people.username, page=1) }}" {% if current_entry_type == 'forum' %} class="current" {% endif %}>{{ _("Forums") }}</a>
+            <a href="{{ url_for('people.favorites_question', username=people.username, page=1) }}" {% if current_entry_type == 'question' %} class="current" {% endif %}>{{ _("Questions") }}</a>
+            <a href="{{ url_for('people.favorites_comment', username=people.username, page=1) }}" {% if current_entry_type == 'comment' %} class="current" {% endif %}>{{ _("Comments") }}</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {%- block entity_data %}
+    {% endblock%}
+    {% if page_total > 1 %}
+    {{ more }}
+    {% endif %}
+
+</div>
+{%- endblock %}
+{%- block sidebar %}
+{% if g.user and g.user.nickname == people.nickname %}
+<div class="box info-manage">
+    <div class="top">个人信息管理</div>
+    <div class="inner">
+        <ol>
+            <li><a href="{{ url_for('people.edit', username=g.user.username) }}">编辑个人资料</a></li>
+            <li><a href="{{ url_for('people.change_passwd', username=g.user.username) }}">修改登录密码</a></li>
+            <li><a href="{{ url_for('people.index', username=g.user.username) }}">我的活动</a></li>
+            <li><a href="{{ url_for('people.favorites_index', username=g.user.username) }}">我的收藏</a></li>
+        </ol>
+
+
+    </div>
+</div>
+{% endif %}
+
+<div class="box info">
+    <div class="inner">
+        <ol>
+
+            <li><b class="inline">{{ _('people.rank') }}</b>{{ people.rank }}</li>
+            <li><b class="inline">{{ _('people.gold_medal') }}</b>{{ people.gold_medal }}</li>
+            <li><b class="inline">{{ _('people.silver_medal') }}</b>{{ people.silver_medal }}</li>
+            <li><b class="inline">{{ _('people.reputation') }}</b>{{ people.reputation }}</li>
+        </ol>
+    </div>
+</div>
+<div class="box info">
+    <div class="top">{{ _("Interest") }}</div>
+    <div class="inner">
+        <ol>
+            {% for interest in people.interest_list %}
+            <li>{{ interest }}</li>
+            {% endfor %}
+        </ol>
+    </div>
+</div>
+<div class="box info">
+    <div class="top">{{ _("Statistics") }}</div>
+    <div class="inner">
+        <ol>
+            <li>{{ _("Article") }}:{{ statistic[0] }}</li>
+            <li>{{ _("News") }}:{{ statistic[1] }}</li>
+            <li>{{ _("Forums") }}:{{ statistic[4] }}</li>
+            <li>{{ _("Questions") }}:{{ statistic[5] }}</li>
+        </ol>
+    </div>
+</div>
+{%- endblock %}
+{%- block js %}
+{{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.idTabs.min.js') }}"></script>
+<script type="text/javascript">
+$(function(){
+    $("#tab").idTabs();
+})
+</script>
+{%- endblock %}

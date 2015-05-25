@@ -1,0 +1,23 @@
+{% extends "people/layout.html" %}
+
+{%- block entity_data %}
+{% if messages_list %}
+{% for message in messages_list %}
+<dl class="people-message">
+    <dt class="xbn"><a href="{{ url_for('people.index', username=message.sender) }}">{{message.sender}}</a> {{ message.created_time|timesince }} 给你发消息：</dt>
+    <dd><a href="{{ url_for('message.read', id=message._id) }}">
+        {% if message.msg_status == 0 %}
+        <b>{{ message.title }}</b>
+        {% else %}
+        {{ message.title }}
+        {% endif %}
+    </a></dd>
+    <dd> <br /></dd>
+</dl>
+{% endfor %}
+{%- else %}
+<p>{{ _("Nobody's posted anything yet.") }}</p>
+{%- endif %}
+{% endblock%}
+
+

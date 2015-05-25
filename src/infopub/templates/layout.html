@@ -1,0 +1,98 @@
+{% set top_menu, guide_menu = get_menu() %}
+{% set tags = guide_menu[_(category_slug)].tag %}
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="zh-CN"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>
+    {% block page_title %}
+      {{ config.PROJECT_NAME }}
+    {% endblock %}
+  </title>
+  <meta name="description" content="{% block meta_description %}{% endblock %}">
+  <meta name="author" content="{% block meta_author %}{% endblock %}">
+  <!-- Mobile viewport optimized: h5bp.com/viewport -->
+  <meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="{{ static('cn486/css/style.css') }}" />
+  {#  {% assets "css_all" %}#}
+  {#    <link rel="stylesheet" href="{{ ASSET_URL }}">#}
+  {#  {% endassets %}#}
+  {% block css %}{% endblock %}
+
+</head>
+<body class="{% block body_class %}{% endblock %}">
+{% block body %}
+<div id="page">
+  {% include "header.html" %}
+<div id="sub_nav">
+  <div class="overwrap">
+    <div class="inwrap" id="socontent">
+      {% block header %}
+        <ul class="nav" id="cat_nav">
+          {% if category_slug != "home" %}
+          {% for menu in top_menu[guide_menu[_(category_slug)].parent].sub_menu %}
+          <li class=""><a class="{% if _(category_slug) == menu %}active{% endif %}" target="_blank" href="/{{ menu }}">{{ guide_menu[menu].name }}</a></li>
+          {% endfor %}
+          {% endif %}
+
+        </ul>
+
+        <span style="float:right">素材交流群:345678</span>
+      {% endblock %}
+    </div>
+  </div>
+</div>
+<div class="overwrap top120">
+{% block sub_menu %}
+  {% if tags %}
+    <div class="inwrap clearfix " id="tags">
+      <a href="/{{ category_slug }}" class="active">全部</a>
+      {% for tag in tags %}
+        <a href="?tag={{ tag }}" class="soitemlabel">{{ tag }}</a>
+      {% endfor %}
+{{ tags.length }}
+    </div>
+  {% endif %}
+{% endblock %}
+</div>
+  <div class="{% block content_class %}container{% endblock content_class %}">
+    <div role="main">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="row">
+            <div class="col-md-12">
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  <a class="close" title="Close" href="#" data-dismiss="alert">&times;</a>
+                  {{ message }}
+                </div><!-- end .alert -->
+              {% endfor %}
+            </div>
+            <!-- end col-md -->
+          </div><!-- end row -->
+        {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+  <div id="container" class="overwrap ">
+    <div id="main" class="inwrap clearfix">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+  {% include "footer.html" %}
+</div>
+  <!-- JavaScript at the bottom for fast page loading -->
+  {#{% assets "js_all" %}#}
+  {#    <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+  {#{% endassets %}#}
+  {% block js %}{% endblock %}
+  <!-- end scripts -->
+{% endblock %}
+</body>
+</html>
+

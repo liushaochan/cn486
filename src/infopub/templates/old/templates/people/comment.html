@@ -1,0 +1,20 @@
+{% extends "people/layout.html" %}
+
+{%- block entity_data %}
+<style type="text/css">
+.people-comment{padding-bottom: 10px;border-bottom: 1px dotted #ccc; margin-bottom: 5px;}
+</style>
+{% if comments_list %}
+{% for comment in comments_list%}
+<dl class="people-comment">
+    <dt class="xbn">{{ comment.created_time|timesince }}对 <a href="{{ url_for('portal.entry', slug=comment.entry.slug) }}#comment-{{ comment.id }}">{{ comment.entry.title }}</a> 的回复：</dt>
+    <dd>{{ comment.comment|code_highlight|gistcode|safe }}</dd>
+    <dd></dd>
+</dl>
+{% endfor %}
+{%- else %}
+<p>{{ _("Nobody's posted anything yet.") }}</p>
+{%- endif %}
+{% endblock%}
+
+

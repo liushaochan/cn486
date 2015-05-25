@@ -1,0 +1,42 @@
+{% extends ("layout.html") %}
+{%- block title -%}
+{{ _("Find user password") }}
+{%- endblock -%}
+{% from "macros/_forms.html" import render_errors %}
+
+{%- block entity %}
+
+<style type="text/css">
+    form th {
+        color: #666666;
+        font-weight: normal;
+        padding: 10px;
+        text-align: right;
+    }
+    form input {
+        padding: 3px;
+    }
+    .title{padding-left: 110px;}
+    textarea{width: 312px;padding: 3px;}
+
+</style>
+
+<div id="users" class="w700 fn-left">
+<h2 class="title">{{ _("Find user password") }}</h2>
+<form method="POST" action=".">
+    {{ form.hidden_tag() }}
+	<table cellspacing="0" class="form-table">
+	<tbody>
+    		<tr>
+    			<th>{{ form.email.label }}</th>
+        		<td>{{ form.email(size=50) }} {{ render_errors(form.email) }}</td>
+    		</tr>
+            <th></th>
+            <td>{{ form.submit }}</td>
+        </tr>
+	</tbody>
+	</table>
+</form>
+</div>
+
+{%- endblock %}

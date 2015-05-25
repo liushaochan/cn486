@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html ng-app="mainApp">
+	<head lang="cn">
+		<meta charset="utf-8" />
+		<title> {% block page_title %} {{ config.PROJECT_NAME }} {% endblock %}</title>
+        <meta name="description" content="{% block meta_description %}{% endblock %}">
+        <meta name="author" content="{% block meta_author %}{% endblock %}">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+		<!-- basic styles -->
+		<link href="{{ assets('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+		<link rel="stylesheet" href="{{ assets('font-awesome/css/font-awesome.min.css') }}" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="{{ assets('font-awesome/css/font-awesome-ie7.min.css') }}" />
+		<![endif]-->
+		<!-- ace styles -->
+		<link rel="stylesheet" href="{{ assets('ace/css/ace.min.css') }}" />
+		<link rel="stylesheet" href="{{ assets('ace/css/ace-rtl.min.css') }}" />
+		<link rel="stylesheet" href="{{ assets('ace/css/ace-skins.min.css') }}" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="{{ assets('ace/css/ace-ie.min.css') }}" />
+		<![endif]-->
+		<!-- inline styles related to this page -->
+		<!-- ace settings handler -->
+		<script src="{{ assets('ace/js/ace-extra.min.js') }}"></script>
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		<script src="{{ assets('html5shiv.js') }}"></script>
+		<script src="{{ assets('respond.min.js') }}"></script>
+
+		<![endif]-->
+
+
+        {% block css %}
+        {% endblock %}
+	</head>
+
+	<body ng-controller="contentCtr">
+		<div class="navbar navbar-default" id="navbar">
+			<script type="text/javascript">
+				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="navbar-container" id="navbar-container">
+				<div class="navbar-header pull-left">
+					<a href="#" class="navbar-brand">
+						<small>
+							Editor
+						</small>
+					</a><!-- /.brand -->
+				</div><!-- /.navbar-header -->
+
+				<div class="navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">
+						<li class="light-blue">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo" src="{{ static('img/avatar/privary/default.png') }}" alt="Jason's Photo" />
+								<span class="user-info">
+									<small>欢迎光临,</small>
+									{{ current_user.username }}
+								</span>
+								<i class="icon-caret-down"></i>
+							</a>
+
+							<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+								<li>
+                      <a href="{{ url_for_security('change_password') }}"><i class="icon-cog"></i>{{ _("Change Password") }}</a>
+								</li>
+
+
+								<li class="divider"></li>
+
+								<li>
+                    <a href="{{ url_for_security('logout') }}"><i class="icon-off"></i>{{ _("Logout") }}</a>
+
+								</li>
+							</ul>
+						</li>
+					</ul><!-- /.ace-nav -->
+				</div><!-- /.navbar-header -->
+			</div><!-- /.container -->
+		</div>
+
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<div class="main-container-inner">
+				<a class="menu-toggler" id="menu-toggler" href="#">
+					<span class="menu-text"></span>
+				</a>
+
+                {% include "content/sidebar.html" %}
+
+				<div class="main-content">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+//							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="icon-home home-icon"></i>
+								<a href="/">首页</a>
+							</li>
+							<li class="active">[[ category ]]</li>
+						</ul><!-- .breadcrumb -->
+
+
+					</div>
+
+					<div class="page-content">
+
+            {% block content %}{% endblock %}
+					</div><!-- /.page-content -->
+				</div><!-- /.main-content -->
+
+			</div><!-- /.main-container-inner -->
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="icon-double-angle-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script src="{{ assets('jquery/jquery-2.0.3.min.js') }}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+        <script src="{{ assets('jquery/jquery-1.10.2.min.js') }}"></script>
+        <![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='{{ assets('jquery/jquery-2.0.3.min.js') }}'>"+"<"+"script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+        <script type="text/javascript">
+         window.jQuery || document.write("<script src='{{ assets('jquery/jquery-1.10.2.min.js') }}'>"+"<"+"script>");
+        </script>
+        <![endif]-->
+
+		<script src="{{ assets('bootstrap/js/bootstrap.min.js') }}"></script>
+		<script src="{{ assets('jquery/jquery-ui-1.10.3.custom.min.js') }}"></script>
+		<script src="{{ assets('jquery/jquery.slimscroll.min.js') }}"></script>
+		<!-- ace scripts -->
+		<script src="{{ assets('ace/js/ace.min.js') }}"></script>
+    <script src="{{ assets('angular/angular.min.js') }}"></script>
+		<script type="text/javascript">
+      var app = angular.module('mainApp', []);
+      app.config(function($interpolateProvider) {
+        $interpolateProvider.startSymbol('[[');
+        $interpolateProvider.endSymbol(']]');
+      });
+
+
+
+		</script>
+  {% block js %} {% endblock %}
+	</body>
+</html>
+

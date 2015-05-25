@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% from "macros/_forms.html" import render_errors %}
+{%- block title -%}{{ _("user login") }}{%- endblock -%}
+
+{%- block entity %}
+<style type="text/css">
+    form th {
+        color: #666666;
+        font-weight: normal;
+        padding: 10px;
+        text-align: right;
+    }
+    .form-table  input {
+        padding: 3px;
+    }
+    .title{padding-left: 110px;}
+    textarea{width: 312px;padding: 3px;}
+    #real-avatar .avatar {
+        background: none repeat scroll 0 0 #FFFFFF;
+        border: 1px solid #DDDDDD;
+        float: right;
+        margin-right: 20px;
+        padding: 2px;
+    }
+</style>
+<div class="">
+    <div class="top">
+    <h3>欢迎登录{{ config.SITE_NAME }}，如果未加入的请点击<a href="/account/signup/">注册新会员</a></h3>
+    </div>
+    <div id="sign" class="inner">
+        <div class="cancel-comment-reply">
+            <div id="real-avatar">
+                <img width="73" height="73" class="avatar avatar-73 photo avatar-default" src="http://0.gravatar.com/avatar/s=73" alt="">	</div>
+        </div>
+        <form method="POST" action="" class="w700 fn-left">
+            {{ form.hidden_tag() }}
+            <table cellspacing="0" class="form-table">
+            <tbody>
+                <tr>
+                    <th>{{ form.login.label }}</th>
+                    <td>{{ form.login(size=30) }}<a href="http://cn.gravatar.com/" target="_blank" title="申请一个自己的Gravatar全球通用头像" id="Get_Gravatar">（申请自己的个性头像）</a>
+                        {{ render_errors(form.login) }}</td>
+                </tr>
+                <tr>
+                    <th>{{ form.password.label }}</th>
+                    <td>{{ form.password(size=30) }} {{ render_errors(form.password) }}</td>
+                </tr>
+                {% if session['need_verify'] %}
+                <tr>
+                    <th>{{ form.recaptcha.label }}</th>
+                    <td>
+                        {{ form.recaptcha(size=5) }} {{ render_errors(form.recaptcha) }}
+                        <img id="captcha" src="{{ url_for('misc.validate_code') }}" align="top" alt="验证码"
+                             onclick="this.src='{{ url_for('misc.validate_code') }}?' + new Date().getTime();this.blur();"
+                             style="cursor:pointer;"/>
+                    </td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th></th>
+                    <td class="t1">{{ form.remember }}&nbsp;<label for="auto">下次自动登录,使用公用电脑请勿选择该项</label>
+                        </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>{{ form.submit }}&nbsp; &nbsp;&nbsp;&nbsp;<a href="/account/rest_passwd/">忘记密码？</a></td>
+                </tr>
+
+            </tbody>
+            </table>
+        </form>
+
+        <div class="fn-clear"></div>
+    </div>
+    <div class="third t1">
+
+    </div>
+
+</div>
+{%- endblock %}
+{%- block sidebar %}{%- endblock %}
+{%- block js %}
+{{ super() }}
+
+
+<script src="{{ url_for('static', filename='js/md5-min.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(function(){
+        $('#login').blur(function(){
+            $('#real-avatar .avatar').attr('src','http://www.gravatar.com/avatar/' + hex_md5($('#login').val())) + '?d=mm&s=73';
+        });
+
+
+
+    });
+</script>
+{%- endblock %}

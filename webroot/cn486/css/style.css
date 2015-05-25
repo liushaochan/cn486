@@ -1,0 +1,683 @@
+﻿@charset "utf-8";
+
+/* 防止用户自定义背景颜色对网页的影响，添加让用户可以自定义字体 */
+html {
+    color: #444333;
+    background: #f1f1f1;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-rendering: optimizelegibility;
+}
+
+/* 内外边距通常让各个浏览器样式的表现位置不同 */
+body, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    margin: 0;
+    padding: 0;
+}
+
+/* 重设 HTML5 标签, IE 需要在 js 中 createElement(TAG) */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+/* HTML5 媒体文件跟 img 保持一致 */
+audio, canvas, video {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+}
+
+/* 要注意表单元素并不继承父级 font 的问题 */
+body, button, input, select, textarea {
+    font:500 0.875em/1.8 Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
+}
+
+/* 去除 IE6 input/button 多余的空白 */
+button, input {
+    *width: auto;
+    *overflow: visible;
+
+    /* 让 input 和 button 一样高 */
+    line-height: normal;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+/* 去掉各Table cell 的边距并让其边重合 */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* IE bug fixed: th 不继承 text-align*/
+th {
+    text-align: inherit;
+}
+
+/* 去除默认边框 */
+fieldset, img {
+    border: 0;
+}
+/* 能够解决img在html5下有留边的问题*/
+img {
+  vertical-align: middle;
+}
+/* 解决 IE6-7 图片缩放锯齿问题 */
+img {
+    -ms-interpolation-mode: bicubic;
+}
+
+/* ie6 7 8(q) bug 显示为行内表现 */
+iframe {
+    display: block;
+}
+
+/* 块/段落引用 */
+blockquote {
+    font-family:Optima, Georgia, STSong, serif;
+    margin: 1em 0;
+    color:#999;
+    padding: 0.6em 1em;
+    background:#f8f8f8;
+    border-left: 0.4em solid #ddd;
+}
+blockquote blockquote {
+    padding: 0 0 0 1em;
+    margin-left: 2em;
+}
+blockquote p {
+    margin-bottom: 0;
+}
+
+/* Firefox 以外，元素没有下划线，需添加 */
+acronym, abbr {
+    border-bottom: 1px dotted;
+    font-variant: normal;
+}
+
+/* 添加鼠标问号，进一步确保应用的语义是正确的（要知道，交互他们也有洁癖，如果你不去掉，那得多花点口舌） */
+abbr {
+    cursor: help;
+}
+
+/* 一致的 del 样式 */
+del {
+    text-decoration: line-through;
+}
+
+address, caption, cite, code, dfn, em, th, var {
+    font-style: normal;
+    font-weight: 400;
+}
+
+/* 去掉列表前的标识, li 会继承，大部分网站通常用列表来很多内容，所以应该当去 */
+ul, ol {
+    list-style: none;
+}
+
+/* 对齐是排版最重要的因素, 别让什么都居中 */
+caption, th {
+    text-align: left;
+}
+
+q:before, q:after {
+    content: '';
+}
+
+/* 统一上标和下标 */
+sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: text-top\9;
+}
+:root sub, :root sup{
+    vertical-align: baseline; /* for ie9 and other mordern browsers */
+}
+sup {
+    top: -0.5em;
+}
+sub {
+    bottom: -0.25em;
+}
+
+/* 让链接在 hover 状态下显示下划线 */
+a:hover {
+    text-decoration: underline;
+}
+
+/* 默认不显示下划线，保持页面简洁 */
+ins, a {
+    text-decoration: none;
+}
+
+/* 专名号：虽然 u 已经重回 html5 Draft，但在所有浏览器中都是可以使用的，
+* 要做到更好，向后兼容的话，添加 class="typo-u" 来显示专名号
+* 关于 <u> 标签：http://www.whatwg.org/specs/web-apps/current-work/multipage/text-level-semantics.html#the-u-element
+* 被放弃的是 4，之前一直搞错 http://www.w3.org/TR/html401/appendix/changes.html#idx-deprecated
+* 一篇关于 <u> 标签的很好文章：http://html5doctor.com/u-element/
+*/
+u, .typo-u {
+    text-decoration: underline;
+}
+
+/* 标记，类似于手写的荧光笔的作用 */
+mark {
+    background: #fffdd1;
+}
+
+/* 代码片断 */
+pre, code {
+    font-family: "Courier New", Courier, monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre {
+    background: #f8f8f8;
+    border:1px solid #ddd;
+    padding: 1em 1.5em;
+}
+
+/* 一致化 horizonal rule */
+hr{
+    border:none;
+    border-bottom:1px solid #cfcfcf;
+    margin-bottom:10px;
+    *color:pink;*filter:chroma(color=pink);
+    height:10px;
+    *margin:-7px 0 2px;
+}
+
+/* 底部印刷体、版本等标记 */
+small, .typo-small,
+
+/* 图片说明 */
+figcaption {
+    font-size: 0.9em;
+    color: #888;
+}
+
+/* 可拖动文件添加拖动手势 */
+[draggable] {
+    cursor: move;
+}
+
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both
+}
+
+.clearfix {
+    zoom: 1
+}
+
+/* 强制文本换行 */
+.textwrap, .textwrap td, .textwrap th{
+    word-wrap:break-word;
+    word-break:break-all;
+}
+.textwrap-table{
+    table-layout:fixed;
+}
+
+/* 提供 serif 版本的字体设置 */
+.serif{font-family:Palatino, Hiragino Mincho ProN W3, Optima, STSong, Georgia, serif;}
+
+/* 保证块/段落之间的空白隔行 */
+.typo p, .typo pre, .typo ul, .typo ol, .typo dl, .typo form, .typo hr, .typo table,
+.typo-p, .typo-pre, .typo-ul, .typo-ol, .typo-dl, .typo-form, .typo-hr, .typo-table {
+    margin-bottom: 1.2em;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-weight: 500;
+    *font-weight: 800;
+    font-family: Helvetica Neue, Microsoft Yahei,Hiragino Sans GB,WenQuanYi Micro Hei,sans-serif;
+    color:#333;
+}
+
+/* 标题应该更贴紧内容，并与其他块区分，margin 值要相应做优化 */
+.typo h1, .typo h2, .typo h3, .typo h4, .typo h5, .typo h6,
+.typo-h1, .typo-h2, .typo-h3, .typo-h4, .typo-h5, .typo-h6 {
+    margin-bottom: 0.4em;
+    line-height: 1.5;
+}
+.typo h1, .typo-h1 {
+    font-size: 1.8em;
+}
+.typo h2, .typo-h2 {
+    font-size: 1.6em;
+}
+.typo h3, .typo-h3 {
+    font-size: 1.4em;
+}
+.typo h4, .typo-h4 {
+    font-size: 1.2em;
+}
+.typo h5, .typo h6, .typo-h5, .typo-h6 {
+    font-size: 1em;
+}
+
+/* 在文章中，应该还原 ul 和 ol 的样式 */
+.typo ul, .typo-ul {
+    margin-left: 1.3em;
+    list-style: disc;
+}
+.typo ol, .typo-ol {
+    list-style: decimal;
+    margin-left: 1.9em;
+}
+.typo li ul, .typo li ol, .typo-ul ul, .typo-ul ol, .typo-ol ul, .typo-ol ol {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 2em;
+}
+.typo li ul, .typo-ul ul, .typo-ol ul {
+    list-style: circle;
+}
+
+/* 同 ul/ol，在文章中应用 table 基本格式 */
+.typo table th, .typo table td, .typo-table th, .typo-table td .typo table caption{
+    border: 1px solid #ddd;
+    padding: 0.5em 1em;
+    color:#666;
+}
+.typo table th, .typo-table th {
+    background: #fbfbfb;
+}
+.typo table thead th, .typo-table thead th {
+    background: #f1f1f1;
+}
+.typo table caption {
+    border-bottom:none;
+}
+
+/* 去除 webkit 中 input 和 textarea 的默认样式 */
+.typo-input, .typo-textarea{
+    -webkit-appearance:none;
+    border-radius:0;
+}
+
+/* 高亮选中 */
+::-moz-selection {
+    background:#08c;
+    color:#fff;
+}
+::selection {
+    background:#08c;
+    color:#fff;
+}
+
+/* TODO: 供着重号使用 */
+.typo-em, .typo em, legend, caption {font-weight: 700;}
+
+
+
+
+/*布局*/
+
+
+.overwrap {
+    width: auto;
+}
+
+.inwrap{
+    width: 1780px;
+    margin: 0 auto;
+}
+
+.showimg  {
+    max-width: 1140px;
+    margin: 20px 0;
+	background:#ffffff;
+	padding:20px;
+	float:left;
+	
+	
+}
+.showinfo{
+	float:right;
+	width:540px;
+	background:#ffffff;
+	margin: 20px 0;
+	padding:20px;
+}
+.showinfo .like{width:50%;float:left;background:#ff3399;color:#ffffff;text-align:center;height:50px;line-height:50px;margin: 10px 0;}
+.showinfo .download{width:50%;float:left;background:#99cc00;color:#ffffff;text-align:center;height:50px;line-height:50px;margin: 10px 0;}
+.share a{float:right;width:60px;height:1px;padding-top:39px;margin-left:3px;overflow:hidden;background-color: #DDDDDD;
+background-image: url("../img/i.png");
+    background-repeat: no-repeat;
+}
+.ad{margin:10px 0;}
+.share .sina{background-position:-235px -50px;}
+.share .sina:hover{background-color: #D63B22;}
+.share .qq{background-position:-380px -50px;}
+.share .qq:hover{background-color: #3EB0D8;}
+.share .twitter{background-position:-185px -50px;}
+.share .twitter:hover{background-color: #31C1EB;}
+.share .facebook{background-position:-330px -50px;}
+.share .facebook:hover{background-color: #39599F;}
+.towtile .in{margin:20px;height:180px;overflow:hidden;}
+.imgpan{width:290px;float:left;}
+.imgpan .thumbnail{float:left;margin:5px 0 0 5px;}
+.showinfo .tag {margin:20px 0;}
+.tag a{background:#EDEDED;color:#838383; height: 20px;
+    line-height: 20px;
+    padding: 0 10px;}
+.txtpan{    float: left;
+    margin-left: 10px;
+    width: 270px;}
+.tile {
+    width: 280px;
+    margin-bottom: 46px;
+    background: #fff;
+    float: left;
+    margin-right: 20px;
+	overflow:hidden;
+    -webkit-box-shadow: 0 1px 3px #CCCCCC;   -moz-box-shadow: 0 1px 3px #CCCCCC;    box-shadow: 0 1px 3px #CCCCCC;
+}
+.towtile {
+    width: 580px;
+    height: 280px;
+    margin-bottom: 46px;
+    background: #fff;
+    float: left;
+    margin-right: 20px;
+	overflow:hidden;
+    -webkit-box-shadow: 0 1px 3px #CCCCCC;   -moz-box-shadow: 0 1px 3px #CCCCCC;    box-shadow: 0 1px 3px #CCCCCC;
+}
+
+.tile .thumbnail{display:block;}
+.tile .title{background-color:#f0ebe2;height:45px;line-height:45px;text-align:center;font-size:18px;    -webkit-box-shadow: 0 3px 5px #CCCCCC;   -moz-box-shadow: 0 3px 5px #CCCCCC;    box-shadow: 0 3px 5px #CCCCCC;}
+.tile .title a{color:#666;}.tile .title a:hover{text-decoration:none;color:#0DBDC3;}
+#tags{padding:10px 0;}
+#tags a{padding:5px 10px;color:#6a6a6a;}
+#tags a.active {
+    background:  #F2F2F2;
+    border: 1px solid #DDDDDD;
+    border-radius: 2px;
+
+}
+ #tiless{
+    width: 580px;
+    height: 270px;
+    overflow: hidden;
+    position: relative;
+}
+#container .tile:nth-child(6n) {
+    margin-right: 0
+}
+.towcon .towtile:nth-child(3n){
+	margin-right: 0
+	}
+
+
+@media screen and (max-width:1880px) {
+    .inwrap {
+        width: 1180px;
+    }
+
+    #container .tile:nth-child(6n) {
+        margin-right: 20px;
+    }
+
+    #container .tile:nth-child(4n) {
+        margin-right: 0px;
+    }
+	.towcon .towtile:nth-child(3n){
+	margin-right: 20px;
+	}
+	.towcon .towtile:nth-child(2n){
+	margin-right: 0
+	}
+	.showinfo{width: 1140px;margin:0 0 20px;}
+ 
+}
+.infogroup{padding:10px 0;}
+.icon {
+    display: inline-block;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-image: url(../img/i.png);
+}
+
+.infogroup .icon {
+
+    height: 18px;
+    line-height: 18px;
+    text-indent: 25px;
+    margin-left: 15px;
+    font-family: Arial;
+    color: #BFBFBF
+}
+.icon_view {
+    width: 24px;
+    height: 20px;
+    background-position:-120px 0;
+}
+
+.icon_comment {
+    width: 24px;
+    height: 20px;
+    background-position: -144px 0
+}
+.icon_like {
+    width: 24px;
+    height: 20px;
+    background-position: -336px 0
+}.icon_prev {
+    width: 48px;
+    height: 48px;
+    background-position: -96px -48px;
+}.icon_next {
+    width: 48px;
+    height: 48px;
+    background-position: -144px -48px;
+}
+.icon_like:hover{background-position: -360px 0}
+.big{font-size:200%;}
+#logo {
+    float: left;
+    width: 170px;
+    height: 1px;
+	padding-top:66px;
+    display: block;
+	background-repeat: no-repeat;
+    background-image: url(../img/logo.png);
+	background-position: 0 -67px;
+	overflow: hidden;
+	
+}
+#logo:hover{background-position:0 0;}
+
+#hnav {
+    width: auto;
+    height: 50px;
+    float: left;
+    
+}
+
+#hnav li {
+    width: auto;
+    height: 50px;
+    float: left;
+	list-style:none;
+}
+#cat_nav li{    width: auto;
+    height: 60px;
+    float: left;}
+
+#cat_nav li a {
+    width:90px;
+    line-height: 60px;
+    display: block;
+    color: #6a6a6a;
+	text-align: center;
+    
+}
+#cat_nav li .active {
+    background:url("../img/menu_hove.png") 0 -50px  no-repeat;
+    
+}
+#hnav li a {
+    padding: 0 25px;
+    line-height: 64px;
+    display: block;
+    color: #fff;
+    font-size: 110%;
+	
+    transition: background-color ease .3s
+}
+
+#hnav li a:hover {
+    background-repeat: no-repeat;
+    border-bottom:3px solid #ffde00;
+	text-decoration:none;
+}
+
+#hnav li a.active {
+    background-color: #4b4d4f;
+	border-bottom:3px solid #ffde00;
+    color: #f1f1f1;
+}
+
+#hnav li.hnavmore a {
+    position: relative;
+}
+
+#header {
+    width: 100%;
+    height: 67px;
+    position: fixed;
+    z-index: 3;
+    background: #323436;
+	
+}
+#container h2{
+    height: 60px;
+    border-bottom: #f0f1f1 1px solid;
+    text-indent: 18px;
+    line-height: 60px;
+    font-size: 18px;
+    color: #6b6b6b;
+	background:#fff;
+	margin-bottom:5px;
+}
+#container h2 a span{margin-top:6px;}
+#container h2 .more,#container h2 .prev,#container h2 .next{height: 60px;
+    width: 99px;
+    display: block;
+    float: right;
+    line-height: 60px;
+    text-align: center;
+    font-size: 14px;
+    color: #7e7e7e;
+    border-left: #f0f1f1 1px solid;
+    text-indent: 0}
+#container h2 .prev,#container h2 .next{
+	width:60px;
+}
+#container h2 .prev:hover,#container h2 .next:hover{
+	background:#969696;
+}
+
+#headerbody {
+    height: 50px;
+}
+
+#hrnav {
+    float: right;
+}
+#soform {
+    float: left;
+    margin-top: 24px;
+}
+
+#soform form {
+    background: #fff;
+    width: 170px;
+    height: 24px;
+}
+
+#soform form input {
+    float: left;
+	border: none;
+    background: none;
+}
+
+#soform form input[type=text] {
+    line-height: 14px;
+    height: 14px;
+    color: #8b8d90;
+    padding: 5px 9px;
+    width: 122px;
+    outline: none
+}
+
+#soform form input[type=submit] {
+    width: 30px;
+    height: 32px;
+    cursor: pointer;
+    transition: background-color ease-out .3s
+}
+
+#soform form input[type=submit]:hover {
+    background-color: #2a2c2e
+}
+
+#mulogin {
+    float: left;
+    margin-top: 24px;
+    margin-left: 10px;
+}
+
+#mulogin a {
+    background: #505050;
+    color: #ACACAC;
+    display: block;
+    float: left;
+    font-size: 14px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    transition: color 0.3s ease-out 0s;
+    width: 70px;
+}
+
+#mulogin a:hover {
+    color: #fff;
+}
+
+#mulogin a#muregbtn {
+    background: #0dbdc3;
+    color: #fff;
+}
+
+
+#sub_nav {
+    height: 60px;
+    width: 100%;
+    position: fixed;
+    top: 67px;
+    z-index: 2;
+    background-color: #f7f8f8;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.top120 {
+    padding-top: 140px;
+}
+#footer a{color:#666666;}
+#footer{ background:  #222324;
+    color: #8E8E8E;
+    height: 60px;
+    padding: 20px 0;}
+

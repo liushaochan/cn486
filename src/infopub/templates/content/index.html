@@ -1,0 +1,232 @@
+{% extends "content/base.html" %}
+
+{% block content %}
+<div class="row" ng-controller="ListCtrl">
+
+<div class="col-xs-12">
+<div class="table-header">
+  [[ tip ]]
+  <a style="float: right;background: rgba(0,0,0,0.2);color: #fff;padding: 0 10px;" target="_blank" href="/entry/create?category_id=[[ category_id ]]">[[ add ]]</a>
+</div>
+
+<div class="table-responsive" style="display: none;">
+<div role="grid" class="dataTables_wrapper" id="sample-table-2_wrapper">
+<div class="row">
+  <div class="col-sm-6">
+    <div id="sample-table-2_length" class="dataTables_length"><label>Display
+      <select name="sample-table-2_length" size="1" aria-controls="sample-table-2">
+      <option value="10" selected="selected">10</option>
+      <option value="25">25</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select> records</label>
+    Showing [[ (page-1) * page_size + 1 ]] to 10 of [[ total ]] entries
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="dataTables_filter" id="sample-table-2_filter">
+							<form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="icon-search nav-search-icon"></i>
+								</span>
+							</form>
+    </div>
+  </div>
+</div>
+  <table class="table table-striped table-bordered table-hover dataTable" >
+<thead>
+<tr role="row">
+  <th class="center sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 57px;" aria-label=" ">
+    <label>
+      <input type="checkbox" class="ace">
+      <span class="lbl"></span>
+    </label>
+  </th>
+
+  <th class="sorting"> Title </th>
+  <th class="hidden-480 sorting" style="width: 100px;" >Status</th>
+  <th class="sorting_disabled" role="columnheader" rowspan="1" colspan="1" style="width: 166px;" aria-label=""></th>
+</tr>
+</thead>
+
+
+  <tbody role="alert" aria-live="polite" aria-relevant="all">
+  <tr ng-repeat="list in data.data_list ">
+    <td class="center  sorting_1">
+      <label>
+        <input type="checkbox" class="ace">
+        <span class="lbl"></span>
+      </label>
+    </td>
+    <td> [[list.title]]</td>
+
+    <td><span class="label label-sm label-warning">[[list.entry_status | status]]</span></td>
+    <td>
+      <div class="visible-md visible-lg hidden-sm hidden-xs action-buttons">
+        <a href="/[[ category_slug ]]/[[ list.slug ]].html" class="blue" target="_blank"> <i class="icon-zoom-in bigger-130"></i> </a>
+        <a href="/entry/edit?category_id=[[ category_id ]]&entry_id=[[ list.id ]]" target="_blank" class="green"> <i class="icon-pencil bigger-130"></i> </a>
+        <a href="javascript:void(null);" ng-click="delete([[ list.id ]])"  class="red"> <i class="icon-trash bigger-130"></i> </a>
+        <a id="delete-entries-[[ list.id ]]" style="display:none;" href="javascript:void(null);" onclick="ajax_post(''); return false;">{{ _('Yes') }}</a>
+      </div>
+    </td>
+  </tr>
+
+
+  </tbody>
+</table>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="dataTables_info" id="sample-table-2_info">controll</div>
+  </div>
+  <div class="col-sm-6">
+    <div class="dataTables_paginate paging_bootstrap">
+      <ul class="pagination">
+        [[ pagination ]]
+        <li class="prev disabled"><a href="#"><i class="icon-double-angle-left"></i></a></li>
+        <li class="active"><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li class="next"><a href="#"><i class="icon-double-angle-right"></i></a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}
+{% block js %}
+
+
+<script type="text/javascript">
+ //查询参数
+    var _option = {
+        server:'',
+        message:'',
+        query:'',
+        sort:'',
+        order:'asc',
+        category_name:'',
+        category_id:'',
+        category_slug:'',
+        page:1,
+        total:1,
+        tip:'请选择一个栏目！！',
+        page_size:10
+    };
+ var _result='';
+  app.controller("contentCtr",function($scope){
+    $scope.tip = _option.tip;
+    $scope.category = _option.category_name;
+    $scope.$on("Transport",function(event){
+        $scope.$broadcast("List",_option);
+    });
+  });
+  function setPagination(page,page_size,total){
+    var min = page - 3;
+    var max = page + 3 + 1;
+    var pages = page_size%total;
+    var li = "";
+    if(min < 0 ) {
+      max = max - min ;
+    }
+
+    if(max >= pages){ min = min - max + pages ;}
+    if(min < 0 ){ min = 0 ;}
+    if(max >= pages){max = pages ;}
+    if(min > 0){
+      li += '<li> < a href="0">&laquo;</a> </ li>'
+    }
+    else {
+      li += '<li class="disabled"> < a href="javascript:void(0)">&laquo;</a> </ li>';
+    }
+    if(page > 0){
+      li += '<li> < a href="'+(page-1) +'">&lt;</a> </ li>';
+    }
+    else{
+      li += '<li class="disabled"> < a href="javascript:void(0)">&lt;</a> </ li>';
+    }
+    for(var i=min;i<max;i++){
+      if(page == i){
+        li += '<li class="active"> < a href="javascript:void(0)">'+ (i + 1) +'</a> </ li> '
+      }
+      else{
+        li += '<li> < a href="'+(i)+'">'+ (i + 1) +'</a> </ li>';
+      }
+    }
+    if(page + 1 < pages ) {
+        li +='<li> < a href="'+(page + 1)+'">&gt;</a> </li>';
+    }
+    else{
+      li += '<li class="disabled"> < a href="javascript:void(0)">&gt;</a> </ li>';
+    }
+    if(max < pages ){
+      li += '<li> < a href="'+(pages - 1)+'">&raquo;</a> </ li>';
+    }
+    else{
+      li += '<li class="disabled"> < a href="javascript:void(0)">&raquo;</a> </ li> ';
+    }
+    return li;
+  }
+ //信息列表
+ app.controller('ListCtrl', function ($scope, $http) {
+
+   $scope.$on('List', function (event, _option) {
+
+     var url = '/'+_option.category_slug+'/'+_option.page+'_'+_option.page_size+'.json';
+     console.log(url);
+     $http.get(url).success(function (data) {
+       $scope.data = data;
+       _result = data;
+       _option.total = _result.total;
+{#       console.log(_result.total);#}
+     });
+    $scope.category = _option.category_name;
+    $scope.category_id = _option.category_id;
+    $scope.category_slug = _option.category_slug;
+    $scope.tip = _option.tip;
+    $scope.pagination = setPagination(_option.page,_option.page_size,_option.total);
+    $scope.add = "添加"+_option.category_name;
+    $scope.page = _option.page;
+    $scope.total = _result.total;
+    console.log(_result.total);
+
+    $scope.page_size = _option.page_size;
+
+
+   });
+
+   $scope.delete = function(id){
+     $('#delete-entries-'+ id).toggle();
+   };
+
+ });
+
+  //分类列表
+app.controller('categoryListCtr',function($scope){
+  $scope.setSlug = function(slug,category,id){
+    _option.category_id = id;
+    _option.category_slug = slug;
+    _option.category_name = category;
+    _option.tip = "当前所属栏目是："+category;
+    $scope.$emit('Transport');
+    $(".table-responsive").show();
+  };
+});
+
+app.filter('status',function(){
+  return function(input){
+    var entryStatus=['草稿','待审','已删除','发布','已接受'];
+    return entryStatus[input];
+  };
+});
+
+
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo uwsgi --stop /tmp/ccblog.pid
+uwsgi --stop /tmp/ccblog.pid
+echo done

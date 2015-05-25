@@ -1,0 +1,243 @@
+{% extends ("layout2.html") %}
+{%- block title -%}
+{{ _("create article data") }}
+{%- endblock -%}
+{% from "macros/_forms.html" import render_errors %}
+{%- block position %}
+
+    <h3 >
+    <a href="{{ url_for('portal.index') }}">{{ _("Home") }}</a>&nbsp;
+        <em>
+     » <a id="categoryPos"></a>
+     » {{ _("create article data") }} </em></h3>
+
+{%- endblock %}
+{%- block entity %}
+
+<div class="doubleSpacing"></div>
+
+<form method="POST" action="/entry/create" id="published-form">
+    {{ form.hidden_tag() }}
+   <div class=" container-fluid">
+        <div class="row-fluid">
+
+            <div class="span4">
+                <label class="pull-left">分类：</label> <a href="javascript:void(0)" class="btn flat btn-small btn-warning selCategory">请选择分类</a>{{ render_errors(form.category_id) }}
+            </div>
+            <div class="span8 entryType">
+                <label class="pull-left">类型：</label>
+                <span >
+                    {{ render_errors(form.entry_type) }}
+                </span>
+            </div>
+
+        </div>
+   </div>
+   <!--<div class="blank-lines"></div>-->
+    <hr class="bs-docs-separator">
+   <div class=" container-fluid">
+        <div class="row-fluid">
+            <div id="sourceTypewrap" class="span4">
+                <label class="pull-left">来源：</label> {{ form.source_type }}{{ render_errors(form.source_type) }}
+            </div>
+            <div id="viewStatuswrap" class="span4">
+                <label class="pull-left">显示：</label> {{ form.view_status }}{{ render_errors(form.view_status) }}
+            </div>
+
+
+        </div>
+    </div>
+    {{ form.title(size=100,placeholder='在此键入标题',class='span12') }} {{ render_errors(form.title) }}
+    <div id="sourcetitlewrap" class="" style="display: none;">
+    {{ form.source_title(size=100,placeholder='在此键入来源标题',class='span12') }} {{ render_errors(form.source_title) }}
+    </div>
+    <div id="sourceurlewrap" class="" style="display: none;">
+    {{ form.source_url(size=200,placeholder='在此键入来源网址',class='span12') }} {{ render_errors(form.source_url) }}
+    </div>
+    <div class="softwrap" style="display: none;">
+    {{ form.attachment_id_list(size=200,placeholder='下载地址',class='span12') }} {{ render_errors(form.attachment_id_list) }}
+    </div>
+
+    <table class="softwrap" style="display: none;" width="100%" height="30">
+        <tr>
+            <td><label class="left">开发语言：</label>
+                {{ form.principal_language(class="input-medium") }}{{ render_errors(form.principal_language) }}</td>
+            <td><label class="left">运行环境：</label>
+                {{ form.runtime_platform(class="input-medium") }}{{ render_errors(form.runtime_platform) }}</td>
+            <td><label class="left">授权协议：</label>
+                {{ form.license_agreement(class="input-medium") }}{{ render_errors(form.license_agreement) }}</td>
+        </tr>
+    </table>
+
+    <p class="defa_qsadd" style="display: none;">问题补充<span class="defa_s">可选</span></p>
+    <div id="conwrap">
+    {{ form.content(placeholder='内容') }} {{ render_errors(form.content) }}
+    </div>
+    <div class="doubleSpacing"></div>
+    <div id="summarywrap" >
+    {{ form.summary(size=200,placeholder='摘要',class='span12') }} {{ render_errors(form.summary) }}
+    </div>
+    <div id="featureImagewrap" class="drop">
+    {{ form.feature_image(placeholder='特色图',class='span12') }}
+
+    {{ render_errors(form.feature_image) }}
+    </div>
+
+    <div class="row-fluid">
+        <div class="span12">
+        <select name="m_tags" style="width:100%" data-placeholder="Tag在右侧输入，请认真选择关键词，关键词个数不要大于五个！"  id="m_tags" multiple="multiple"></select>
+
+        </div>
+    </div>
+    {{ render_errors(form.tags) }}
+        {% if g.user.is_supervisor %}
+       <label >推首页：</label>{{ form.on_portal(class="input-mini") }}
+       <label >置顶：</label>{{ form.on_top(class="input-mini") }}
+        {% endif %}
+       <label >评论：</label>{{ form.comment_status (class="input-mini")}}
+         <div class="form-actions">{{ form.draft }}{{ form.publish }}</div>
+
+    <div class="alert  alert-error " style="display: none;">
+            <button data-dismiss="alert" onclick="javascript:$(this).parent().hide()" class="close" type="button">×</button>
+            <h4 class="alert-heading">表单递交错误!</h4>
+            <ul>
+
+            </ul>
+
+    </div>
+
+</form>
+
+{%- endblock %}
+{%- block sidebar %}
+<h2 style=" font-size: 18px;font-weight: 500;line-height: 100%;margin: 5px 0 20px;padding: 0;">主题创建指南</h2>
+
+为了让大家有个良好的社区环境，请在创建主题时考虑：
+<ul class="ul">
+    <li>提问型主题：如果问题很简短，请在标题中写完，不需要填写问题补充。<div class="sep10"></div></li>
+    <li>分享型主题：请不要分享违反国家法律、法规或其它敏感话题。<div class="sep10"></div></li>
+    <li>请不要发布广告、软文，这些都会被删除。<div class="sep10"></div></li>
+</ul>
+<div class="right_content">
+    <div class="part_title"><h3>添加新的Tag：</h3></div>
+    <div class="lanmu_nav_box">
+        请认真选择关键词，关键词个数不要大于五个！
+        <input type="text" placeholder="输入Tag，失去焦点后会自动加入Tag列表" id="add_tag" value="" style="width: 100%;">
+        <div class="clear"></div>
+    </div>
+</div>
+
+{% if g.user %} {% if g.user.is_supervisor %}
+    <div id="userList">
+        <div class="top">
+
+        </div>
+        <a href="javascript:void(0)" class="sel" data-id="{{ g.user.id }}"> {{ g.user.username }} </a>
+        {% for account in g.user.fake_account_list %}
+        <a href="javascript:void(0)" data-id="{{ account.fake_account_id }}"> {{ account.fake_account_name }} </a>
+        {% endfor %}
+    </div>
+{% endif %}{% endif %}
+
+{%- endblock %}
+
+{%- block css %}
+{{ super() }}
+<link href="{{ url_for('static', filename='360/js/lib/chosen/chosen.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='360/css/editToolBar.css') }}" rel="stylesheet"/>
+<style type="text/css">
+    .categorylist ul li, #source_type li, #view_status li{float: left;margin: 0 5px;}
+    .categorylist span {margin: 3px;padding: 3px 10px;}
+    .defa_qsadd { background: #FFFFFF; border: 1px solid #CCCCCC; border-radius: 6px 6px 6px 6px; color: #333333; cursor: pointer; height: 30px; line-height: 30px; text-indent: 12px; }
+    .defa_s { color: #999999; margin-left: 5px;}
+    .error{border-color: #B94A48 !important;}
+    .sub .btn{background-image:none;padding:0 5px;background-color: #eee;}
+     .drop { margin: 3px; padding: 3px; border: 1px dashed #ccc; }
+    .drop.dragOver { border-color: #29ABE2; }
+</style>
+{%- endblock %}
+{%- block js %}
+{{ super() }}
+<script src="{{ url_for('static', filename='360/js/lib/chosen/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='360/js/lib/ace/ace.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='360/js/lib/marked.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='360/js/lib/jquery/upload.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='360/js/lib/jEdit/jcingeditor.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='360/js/lib/set.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='360/js/lib/jquery/jquery.form.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='360/js/formBase.js') }}" type="text/javascript"></script>
+
+<script type="text/javascript">
+    var img_server_url = "{{ url_for('misc.upload_img') }}";
+    var file_server_url = "{{ url_for('misc.upload_att') }}";
+
+    $(function(){
+
+        initForm();
+        $("#author_id").val("{{ g.user.id }}");
+
+
+        //从地址栏获取文章分类和类型
+        //默认第一位是分类，第二位是类型
+        //如果第二位是空，则默认为文章类类型
+        var hash = window.location.hash,
+            cae =[];
+        if (hash) cae = hash.substring(1).split("_");
+        setCategoryAndEntryType(cae[0]|| 10,cae[1] || 0);
+
+//      {% if g.user %}
+//      {% if g.user.is_supervisor %}
+
+        //如果是管理员用户允许跟换用户
+        $("#userList a").click(function(){
+            $("#author_id").val($(this).data("id"));
+            $("#userList a").removeClass("sel");
+            $(this).addClass("sel");
+        });
+//        {% endif %}{% endif %}
+
+        //tags处理
+        var tags = $("#tags").val();
+        var atags = tags.substr(1,tags.length-2).replace(/"/g,"").split(",")
+
+        $.get('/tag/tag_name.json', function(data) {
+            var d_l = data.length;
+            if(d_l > 0){
+
+               for(var i = 0; i < d_l; i++){
+                   var s = "";
+                   var a_l = atags.length;
+                   if(a_l > 0){
+                       for(var j = 0; j< a_l; j++){
+
+                           if(data[i].id == atags[j])
+                           {
+                               s = "selected";
+                               atags.remove(j);
+                               break;
+                           }
+                           //alert(atags[j]);
+                       }
+                   }
+                    $("#m_tags").append("<option value='"+ data[i].id +"' "+ s +">"+ data[i].tag_name +"</option>");
+                }
+            }
+
+
+            $("#m_tags").chosen();
+        }, "json");
+
+        $("input[name='source_type']").change(function(){
+            if(this.value == 0 ){
+                $("#sourcetitlewrap , #sourceurlewrap").hide();
+                $("#source_title , #source_url").attr("value",'');
+            }else  {
+                $("#sourcetitlewrap , #sourceurlewrap").show();
+            }
+        });
+
+    });
+
+</script>
+
+{%- endblock %}

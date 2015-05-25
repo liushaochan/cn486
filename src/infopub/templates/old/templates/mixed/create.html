@@ -1,0 +1,222 @@
+{% extends ("layout.html") %}
+{%- block title -%}
+{{ _("create article data") }}
+{%- endblock -%}
+{% from "macros/_forms.html" import render_errors %}
+{%- block position %}
+
+    <h2 >
+    <a href="{{ url_for('portal.index') }}">{{ _("Home") }}</a>&nbsp;
+    {% for p in current_category.path %}
+    > <a href="{{ url_for('portal.category', category=p.slug) }}" > {{ p.category_name }} </a>
+    {% endfor %}
+     » {{ _("create article data") }} </h2>
+
+{%- endblock %}
+{%- block entity %}
+<style type="text/css">
+    .categorywrap{width: 93px;float: left;overflow: hidden;height: 20px;}
+    #title,#source_title,#source_url{width: 100%;height: 30px;margin: 10px 0;}
+    #summary{width: 100%;height: 200px;margin: 10px 0;}
+    #feature_image{width: 50%;height: 30px;margin: 10px 0;}
+    #source_type li,#view_status li{float: left;}
+    .misc-pub-section {
+        border-bottom-color: #DFDFDF;
+        border-top-color: #FFFFFF;
+        border-style: solid;
+        border-width: 1px 0;
+        padding: 6px 10px 8px;
+    }
+    .misc-pub-section  li{ display: inline-block;padding: 0 10px;}
+    .tagchecklist {
+        font-size: 12px;
+        margin-left: 14px;
+        overflow: auto;
+    }
+    .tagchecklist span {
+        cursor: default;
+        display: block;
+        float: left;
+        font-size: 11px;
+        line-height: 1.8em;
+        margin-right: 25px;
+        white-space: nowrap;
+    }
+    .tagchecklist span a{
+        background: url("/static/img/xit.gif") no-repeat scroll 0 0 transparent;
+    }
+    .tagchecklist span a:hover, #bulk-titles div a:hover {
+        background-position: -10px 0;
+    }
+    .tagchecklist span a {
+        cursor: pointer;
+        display: block;
+        float: left;
+        height: 10px;
+        margin: 6px 0 0 -9px;
+        overflow: hidden;
+        position: absolute;
+        text-indent: -9999px;
+        width: 10px;
+    }
+</style>
+
+
+
+<form method="POST" action="{{ url_for('entry.create', category_id=current_category.id) }}" id="published-form">
+    {{ form.hidden_tag() }}
+    <table width="100%" height="30">
+        <tr>
+            <td><label class="left">来源：</label>
+                {{ form.source_type }}{{ render_errors(form.source_type) }}</td>
+            <td><label class="left">显示：</label>
+                {{ form.view_status }}{{ render_errors(form.view_status) }}</td>
+        </tr>
+    </table>
+    {{ form.title(size=100,placeholder='在此键入标题') }} {{ render_errors(form.title) }}
+     <div id="sourcetitlewrap" class="mgbt10" style="display: none;">
+            {{ form.source_title(size=100,placeholder='在此键入来源标题') }} {{ render_errors(form.source_title) }}
+        </div>
+        <div id="sourceurlewrap" class="mgbt10" style="display: none;">
+            {{ form.source_url(size=200,placeholder='在此键入来源网址') }} {{ render_errors(form.source_url) }}
+        </div>
+
+        {{ form.content(placeholder='内容') }} {{ render_errors(form.content) }}
+
+        {{ form.summary(size=200,placeholder='摘要') }} {{ render_errors(form.summary) }}
+        {{ form.feature_image(size=100,placeholder='特色图') }}
+        <a href="javascript:void(0);" onclick="showUploadImg('#feature_image')">上传图片</a>
+
+        {{ render_errors(form.feature_image) }}
+       <select name="m_tags" style="width:100%" id="m_tags" multiple="multiple"></select>
+        {{ render_errors(form.tags) }}
+        {% if g.user.is_supervisor %}
+       <label >推首页：</label>{{ form.on_portal }}
+       <label >置顶：</label>{{ form.on_top }}
+        {% endif %}
+       <label >评论：</label>{{ form.comment_status }}
+         <div style="text-align:center;">{{ form.draft }}{{ form.publish }}</div>
+
+</form>
+
+<div class="insertimage" style="display: none;">
+    <div class="top">
+        上传图片：
+        <button class="close right" name="">X</button>
+    </div>
+    <form id="uploadimg" action="/misc/upload_img/" method="POST" enctype="multipart/form-data">
+        <input type="text" value="" placeholder="图片名称" name="title" id="title">
+        <input type="file" name="Filedata"><input style="margin-left:20px;" type="submit" value="上传"><br>
+
+        <div class="progress">
+            <div class="bar"></div>
+            <div class="percent">0%</div>
+        </div>
+
+
+
+    </form>
+</div>
+{%- endblock %}
+
+{%- block css %}
+{{ super() }}
+<link href="{{ url_for('static', filename='plugins/ueditor/themes/default/ueditor.css') }}" rel="stylesheet"/>
+<link href="{{ url_for('static', filename='plugins/chosen/chosen.css') }}" rel="stylesheet"/>
+<style type="text/css">
+    .subcategory{padding-left: 20px;}
+    .noncategory{padding-bottom: 10px;border-bottom: 1px solid #0074cc;margin-bottom: 10px;}
+    .insertimage .top{margin-bottom: 20px;}
+    .insertimage{bottom:0;color:#777777;left:0;margin:auto;position:fixed;right:0;top:20%;z-index:9999;width:400px;height:150px;padding:10px;background-color:#fff;border:1px solid #ccc}
+    .progress{border:1px solid #DDDDDD;border-radius:3px 3px 3px 3px;padding:1px;position:relative;width:400px}
+    .bar{background-color:#B4F5B4;border-radius:3px 3px 3px 3px;height:20px;width:0}
+    .percent{display:inline-block;left:48%;position:absolute;top:3px}
+</style>
+{%- endblock %}
+{%- block js %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/editor.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='plugins/chosen/chosen.jquery.min.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='plugins/ueditor/editor_config.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='plugins/ueditor/editor_all_min.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='plugins/jquery.form.js') }}"></script>
+<script type="text/javascript">
+    var img_server_url = "{{ url_for('misc.upload_img') }}";
+    var file_server_url = "{{ url_for('misc.upload_att') }}";
+    $(function(){
+
+        //tags处理
+
+        $.get('/tag/tag_name.json', function(data) {
+            var d_l = data.length;
+            if(d_l > 0){
+                for(var i = 0; i < d_l; i++){
+
+                    $("#m_tags").append("<option value='"+ data[i].id +"'>"+ data[i].tag_name +"</option>");
+                }
+            }
+            $("#m_tags").chosen();
+        }, "json");
+        // document.domain = "baidu.con";
+        var ue = new UE.ui.Editor();
+        ue.render('content');
+
+        ue.addListener("selectionchange",function(){
+            var state = ue.queryCommandState("source");
+            var btndiv = document.getElementById("btns");
+            if(btndiv && state==-1){
+                disableBtn("enable");
+            }
+        });
+
+        //上传图片表单处理
+        var bar = $('.bar');
+        var percent = $('.percent');
+        var filedata = $('input[name="Filedata"]');
+        var title = $('#title');
+
+        $('.close').click(function(){$('.insertimage').hide();});
+        $('#uploadimg').ajaxForm({
+            dataType:  'json',
+            beforeSend: function() {
+
+                var percentVal = '0%';
+                bar.width(percentVal);
+                percent.html(percentVal);
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                var percentVal = percentComplete + '%';
+                bar.width(percentVal)
+                percent.html(percentVal);
+                //console.log(percentVal, position, total);
+            },
+            complete: function(xhr) {
+
+                filedata.val("");
+                title.val("");
+                bar.width('0%');
+                percent.html('0%');
+                $('.insertimage').hide();
+
+            },
+            success:   function(data){
+                var urlbase = "{{ config.SITE_URL}}";
+                var imgurl = data.url;
+                $(inputId).val(urlbase+imgurl.substring(0,imgurl.length) );
+
+            }
+
+        });
+
+    });
+
+    function showUploadImg(id){
+        inputId = id;
+        $('.insertimage').show();
+    }
+</script>
+
+
+
+
+{%- endblock %}

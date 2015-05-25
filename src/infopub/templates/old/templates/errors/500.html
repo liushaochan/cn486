@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{%- block title -%}
+{{ _("500, An Error Has Occurred") }}
+{%- endblock -%}
+
+{% block entity %}
+<div class="error">
+    <h1>{{ _("500, An Error Has Occurred") }}</h1>
+    <blockquote>
+        <p>{{ _("The requested page, an error has occurred") }}</p>
+    </blockquote>
+</div>
+{%- endblock -%}

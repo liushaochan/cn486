@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% from "macros/_forms.html" import render_errors %}
+{%- block title -%}{{ _("账户被禁止") }}{%- endblock -%}
+{%- block entity %}
+<style type="text/css">
+    form th {
+        color: #666666;
+        font-weight: normal;
+        padding: 10px;
+        text-align: right;
+    }
+    form input {
+        padding: 3px;
+    }
+    .title{padding-left: 110px;}
+    textarea{width: 312px;padding: 3px;}
+
+</style>
+<div class="box">
+
+    <h2 class="top">您的账户已经被管理员禁止</h2>
+    <div id="sign" class="inner">
+        由于您严重违反社区规范，您的账户已经被管理员禁止<br/>
+        <br/>有任何疑问请联系管理员，您可以通过如下方式与我们取得联系：<br />
+        1. 在线提交产品反馈：{{ config.SITE_URL }}/feedback/<br />
+        2. 邮件：{{ config.ADMIN_MAIL }}<br />
+        <br />
+        {{ config.SITE_NAME }}管理员 敬礼！<br />
+    </div>
+</div>
+{%- endblock %}
+{%- block sidebar %}{%- endblock %}

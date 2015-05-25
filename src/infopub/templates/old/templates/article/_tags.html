@@ -1,0 +1,12 @@
+<div class="box">
+    <div class="title">
+        <strong>{{ _("Hot tags") }}</strong>
+    </div>
+    <div class="teach_list">
+        <ul class="unstyled">
+            {% for tag in hot_tags(current_category) %}
+            <li><a href="{{ url_for('portal.tag', category=current_category.slug, tag=tag.slug) }}">{{ tag.tag_name }}</a> <span class="Count">{{ tag.num_entries }}</span></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

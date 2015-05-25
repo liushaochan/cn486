@@ -1,0 +1,21 @@
+    <div class="title right-pos"><strong>{{ _("Latest Comments") }}</strong></div>
+
+    <div class="article-popular">
+        {% if latest_comments %}
+        <table border="0" width="100%">
+            {% for comment in latest_comments %}
+            <tr class="clear" style="border-bottom: 1px dotted #ccc;">
+                <td width="27" align="center" valign="top">
+                    <a href="{{ url_for('people.index', username=comment.username) }}" class="left" style="margin: 5px;">
+                        <img class="small-avatar" src="{{ comment.email|gravatar(size=24) }}" alt="{{ comment.nickname }}"/>
+                    </a>
+                </td>
+                <td valign="middle" >
+                    <a href="{{ url_for('portal.entry', slug=comment.entry.slug) }}#comment-{{ comment.id }}">{{ comment.comment|html_to_text }}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    </div>
+

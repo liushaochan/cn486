@@ -1,0 +1,19 @@
+server {
+    listen 80;
+    server_name blog.chouchang.org;
+    access_log /var/log/nginx/ccblog.log;
+    error_log /var/log/nginx/ccblog.error warn;
+
+    location / { try_files $uri @ccblog; }
+    location @ccblog {
+        include uwsgi_params;
+        uwsgi_pass unix:/tmp/ccblog.sock;
+    }
+    location /static/ {
+        root /var/www/ccblog/ccblog;
+        if (-f $request_filename) {
+            rewrite ^/static/(.*)$ /static/$1 break;
+        }
+    }
+
+}

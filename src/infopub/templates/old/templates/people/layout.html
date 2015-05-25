@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{%- block title -%}
+{{ people.nickname }}的地盘
+{%- endblock -%}
+
+{% from "macros/_forms.html" import render_errors %}
+{%- block position %}
+<h2 >
+    <a href="{{ url_for('portal.index') }}">首页</a>&nbsp;  > {{ people.nickname }}的地盘
+</h2>
+{%- endblock %}
+{%- block entity %}
+<div class="" >
+
+    <div class="top">
+
+    <div id="tabs">
+        <a href="{{ url_for('people.index', username=people.username) }}" {% if current_entry_type == 'latest' %} class="current" {% endif %}>{{ _("Latest") }}</a>
+        <a href="{{ url_for('people.news', username=people.username) }}" {% if current_entry_type == 'news' %} class="current" {% endif %}>{{ _("News") }}</a>
+        <a href="{{ url_for('people.article', username=people.username) }}" {% if current_entry_type == 'article' %} class="current" {% endif %}>{{ _("Article") }}</a>
+        <a href="{{ url_for('people.forum', username=people.username) }}" {% if current_entry_type == 'forum' %} class="current" {% endif %}>{{ _("Forums") }}</a>
+        <a href="{{ url_for('people.question', username=people.username) }}" {% if current_entry_type == 'question' %} class="current" {% endif %}>{{ _("Questions") }}</a>
+        <a href="{{ url_for('people.comment', username=people.username) }}" {% if current_entry_type == 'comment' %} class="current" {% endif %}>{{ _("Comments") }}</a>
+        {% if people.nickname == g.user.nickname %}
+        <a href="{{ url_for('people.message', username=g.user.username) }}" {% if current_entry_type == 'message' %} class="current" {% endif %}>{{ _("Messages") }}</a>
+        {% endif %}
+    </div>
+    </div>
+    <div class="inner">
+    {%- block entity_data %}    {% endblock%}
+    </div>
+    {% if page_total > 1 %}
+    {{ more }}
+    {% endif %}
+
+</div>
+{%- endblock %}
+
+{%- block sidebar %}
+{% if g.user and g.user.nickname == people.nickname %}
+<div class="info-manage">
+    <div class="title right-pos"><h2>个人信息管理</h2></div>
+    <div class="inner">
+    <ol>
+        <li><a href="{{ url_for('people.edit', username=g.user.username) }}">编辑个人资料</a></li>
+        <li><a href="{{ url_for('people.change_passwd', username=g.user.username) }}">修改登录密码</a></li>
+        <li><a href="{{ url_for('people.index', username=g.user.username) }}">我的活动</a></li>
+        <li><a href="{{ url_for('people.favorites_index', username=g.user.username) }}">我的收藏</a></li>
+    </ol>
+</div>
+</div>
+{% endif %}
+
+<div class=" info">
+    <div class="inner">
+    <ol>
+        <li><b class="inline">{{ _('people.rank') }}</b>{{ people.rank }}</li>
+        <li><b class="inline">{{ _('people.gold_medal') }}</b>{{ people.gold_medal }}</li>
+        <li><b class="inline">{{ _('people.silver_medal') }}</b>{{ people.silver_medal }}</li>
+        <li><b class="inline">{{ _('people.reputation') }}</b>{{ people.reputation }}</li>
+    </ol>
+    </div>
+</div>
+<div class=" info">
+    <div class="title right-pos"><h2>{{ _("Interest") }}</h2></div>
+    <div class="inner">
+    <ol>
+        {% for interest in people.interest_list %}
+        <li>{{ interest }}</li>
+        {% endfor %}
+    </ol>
+</div>
+</div>
+<div class=" info">
+    <div class="title right-pos"><h2>{{ _("Statistics") }}</h2></div>
+    <div class="inner">
+    <ol>
+        <li>{{ _("Article") }}:{{ statistic[0] }}</li>
+        <li>{{ _("News") }}:{{ statistic[1] }}</li>
+        <li>{{ _("Forums") }}:{{ statistic[4] }}</li>
+        <li>{{ _("Questions") }}:{{ statistic[5] }}</li>
+    </ol>
+</div>
+</div>
+
+{%- endblock %}
+

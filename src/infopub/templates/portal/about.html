@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="body-content">
+    <div class="row">
+      <h1>About</h1>
+      <p>网站介绍123.</p>
+        {{ "123" | demo }} <br />
+        {{ demo_context_processor }} <br />
+        {{ format_price(12.0) }} <br />
+        {{ now() | format_date('%Y-%m-%d %H:%M') }} <br />
+        {{ timestamp() | pretty_date }} <br />
+        {{ now() | timesince }} <br />
+        {{ "我是来做外链的：http://www.seo.com" | linkify |safe }} <br />
+        {{ '我是来做外链的：<a href="http://www.seo.com" rel="nofollow" class="external" target="_blank">http://www.seo.com</a>' | to_text | linkify | safe }}
+
+        <img src="{{ static('img/avatar/privary/default50.png') }}" alt="" />
+        <img src="{{ image('avatar/privary/default50.png') }}" alt="" />
+
+      <li><a href="/account/login">登录</a></li>
+      <li><a href="/account/register">注册</a><br/></li>
+      <li><a href="/account/reset">取回密码</a><br/></li>
+
+    </div>
+</div>
+{% endblock %}

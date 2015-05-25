@@ -1,0 +1,9 @@
+<div class="edit-button-bar">
+    {% if g.user %}
+    {% if current_category.post_role <= g.user.role %}
+    <span class="edit-button"><a href="{{ url_for('entry.create', category_id=current_category.id) }}">{{ _("Post article") }}</a></span>
+    {% endif %}
+    <span class="edit-button"><a href="{{ url_for('people.article', username=g.user.username, page=1) }}">{{ _("my post article") }}</a></span>
+    {% endif %}
+    <span class="edit-button"><a href="{{ url_for('feed.article') }}">{{ _("RSS article") }}</a></span>
+</div>

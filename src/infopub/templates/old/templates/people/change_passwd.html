@@ -1,0 +1,51 @@
+{% extends ("people/layout.html") %}
+{%- block title -%}
+{{ _("modify user password") }}
+{%- endblock -%}
+{% from "macros/_forms.html" import render_errors %}
+
+{%- block entity %}
+
+<style type="text/css">
+    form th {
+        color: #666666;
+        font-weight: normal;
+        padding: 10px;
+        text-align: right;
+    }
+    form input {
+        padding: 3px;
+    }
+    .title{padding-left: 110px;}
+    textarea{width: 312px;padding: 3px;}
+
+</style>
+
+<div id="users" class="box">
+    <div class="top"><h2 class=""><a href="{{ url_for('portal.index') }}">{{ _('Home') }}</a>&nbsp;  > {{ _("modify user password") }}</h2></div>
+
+<form method="POST" action=".">
+    {{ form.hidden_tag() }}
+	<table cellspacing="0" class="form-table">
+	<tbody>
+    		<tr>
+    			<th>{{ form.password_old.label }}</th>
+        		<td>{{ form.password_old(size=20) }} {{ render_errors(form.password_old) }}</td>
+    		</tr>
+    		<tr>
+    			<th>{{ form.password.label }}</th>
+        		<td>{{ form.password(size=20) }} {{ render_errors(form.password) }}</td>
+    		</tr>
+    		<tr>
+    			<th>{{ form.password_again.label }}</th>
+        		<td>{{ form.password_again(size=20) }} {{ render_errors(form.password_again) }}</td>
+    		</tr>
+        <tr>
+            <th></th>
+            <td>{{ form.submit }}<br/><br/><br/><br/></td>
+        </tr>
+	</tbody>
+	</table>
+</form>
+</div>
+{%- endblock %}

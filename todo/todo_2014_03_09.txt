@@ -1,0 +1,40 @@
+category
+entry
+tag
+comment
+
+这三者直接的关系
+操作：添加/编辑、查询、删除
+
+查询：
+by_category(keyword)
+by_category_tag(keyword)
+全文搜索
+
+梳理docs下面的文档
+   包括用到的第三方库
+   预计2天
+
+梳理infopub
+   预计7天
+
+code review
+/runkit/src/runkit/model/bases.py
+
+用户管理
+  添加角色
+  添加用户
+  设置用户权限
+
+基础数据
+  内容类型
+  系统配置
+
+栏目管理
+
+内容管理
+
+Whoosh
+Flask-WhooshAlchemy
+
+移除flask-restless

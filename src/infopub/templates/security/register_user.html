@@ -1,0 +1,176 @@
+{% from "security/_macros.html" import render_field_with_errors, render_field, render_errors%}
+<!DOCTYPE html>
+<html lang="cn">
+	<head>
+		<meta charset="utf-8" />
+		<title> {% block page_title %} {{ config.PROJECT_NAME }} {% endblock %}</title>
+        <meta name="description" content="{% block meta_description %}{% endblock %}">
+        <meta name="author" content="{% block meta_author %}{% endblock %}">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    		<!-- basic styles -->
+		<link href="{{ assets('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+		<link rel="stylesheet" href="{{ assets('font-awesome/css/font-awesome.min.css') }}" />
+		<!--[if IE 7]>
+		  <link rel="stylesheet" href="{{ assets('font-awesome/css/font-awesome-ie7.min.css') }}" />
+		<![endif]-->
+		<!-- ace styles -->
+		<link rel="stylesheet" href="{{ assets('ace/css/ace.min.css') }}" />
+		<link rel="stylesheet" href="{{ assets('ace/css/ace-rtl.min.css') }}" />
+		<!--[if lte IE 8]>
+		  <link rel="stylesheet" href="{{ assets('ace/css/ace-ie.min.css') }}" />
+		<![endif]-->
+		<!-- inline styles related to this page -->
+		<!-- ace settings handler -->
+		<script src="{{ assets('ace/js/ace-extra.min.js') }}"></script>
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		<script src="{{ assets('html5shiv.js') }}"></script>
+		<script src="{{ assets('respond.min.js') }}"></script>
+		<![endif]-->
+	</head>
+
+	<body class="login-layout">
+		<div class="main-container">
+			<div class="main-content">
+				<div class="row">
+					<div class="col-sm-10 col-sm-offset-1">
+						<div class="login-container">
+							<div class="center">
+								<h1>
+									<i class="icon-star red"></i>
+									<span class="white">manager</span>
+								</h1>
+								<h4 class="blue">中国卫星导航定位应用管理中心</h4>
+							</div>
+
+							<div class="space-6"></div>
+
+							<div class="position-relative">
+								<div class="signup-box widget-box no-border visible" id="signup-box">
+									<div class="widget-body">
+										<div class="widget-main">
+											<h4 class="header green lighter bigger">
+												<i class="icon-group blue"></i>
+												{{ _("Register") }}
+											</h4>
+
+											<div class="space-6"></div>
+											<p> 请输入真实信息: </p>
+                                            {% include "security/_messages.html" %}
+                                            <form action="{{ url_for_security('register') }}" method="POST" name="register_user_form">
+												<fieldset>
+                                                    {{ register_user_form.hidden_tag() }}
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="email" id="email" name="email" placeholder="Email" class="form-control">
+															<i class="icon-envelope"></i>
+														</span>
+													</label>
+                                                    {{ render_errors( register_user_form.email) }}
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="text" id="username" name="username" placeholder="Username" class="form-control">
+															<i class="icon-user"></i>
+														</span>
+													</label>
+                                                    {{ render_errors( register_user_form.username) }}
+
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" id="password" name="password" placeholder="Password" class="form-control">
+															<i class="icon-lock"></i>
+														</span>
+													</label>
+                                                    {{ render_errors( register_user_form.password) }}
+
+                                                    {% if register_user_form.password_confirm %}
+													<label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input type="password" name="password_confirm" id="password_confirm" placeholder="Repeat password" class="form-control">
+															<i class="icon-retweet"></i>
+														</span>
+													</label>
+                                                    {{ render_errors( register_user_form.password_confirm) }}
+
+                                                    {% endif %}
+													<label class="block">
+														<input type="checkbox" class="ace">
+														<span class="lbl">
+															I accept the
+															<a href="#">User Agreement</a>
+														</span>
+													</label>
+
+													<div class="space-24"></div>
+
+													<div class="clearfix">
+														<button class="width-30 pull-left btn btn-sm" type="reset">
+															<i class="icon-refresh"></i>
+															Reset
+														</button>
+
+														<button id="submit" name="submit" type="submit" class="width-65 pull-right btn btn-sm btn-success" type="button">
+															{{ _('Register') }}
+															<i class="icon-arrow-right icon-on-right"></i>
+														</button>
+													</div>
+												</fieldset>
+											</form>
+										</div>
+
+										<div class="toolbar center">
+											<a class="back-to-login-link"  href="{{ url_for_security('login') }}">
+												<i class="icon-arrow-left"></i>
+												Back to login
+											</a>
+										</div>
+									</div><!-- /widget-body -->
+								</div>
+
+
+							</div><!-- /position-relative -->
+						</div>
+					</div><!-- /.col -->
+				</div><!-- /.row -->
+			</div>
+		</div><!-- /.main-container -->
+        <!-- basic scripts -->
+
+		<!--[if !IE]> -->
+
+		<script src="{{ assets('jquery/jquery-2.0.3.min.js') }}"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+        <script src="{{ assets('jquery/jquery-1.10.2.min.js') }}"></script>
+        <![endif]-->
+
+		<!--[if !IE]> -->
+
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='{{ assets('jquery/jquery-2.0.3.min.js') }}'>"+"<"+"script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+        <script type="text/javascript">
+         window.jQuery || document.write("<script src='{{ assets('jquery/jquery-1.10.2.min.js') }}'>"+"<"+"script>");
+        </script>
+        <![endif]-->
+
+		<script src="{{ assets('bootstrap/js/bootstrap.min.js') }}"></script>
+		<script src="{{ assets('jquery/jquery-ui-1.10.3.custom.min.js') }}"></script>
+		<script src="{{ assets('jquery/jquery.slimscroll.min.js') }}"></script>
+
+
+		<!-- ace scripts -->
+
+
+		<script src="{{ assets('ace/js/ace.min.js') }}"></script>
+
+
+	</body>
+</html>

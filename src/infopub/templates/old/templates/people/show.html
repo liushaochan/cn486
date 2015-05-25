@@ -1,0 +1,65 @@
+{% extends ("people/layout.html") %}
+{%- block title -%}
+{{ _("show user data") }}
+{%- endblock -%}
+{%- block position %}
+<h2 class=""><a href="{{ url_for('portal.index') }}">{{ _('Home') }}</a>&nbsp;  > {{ _("show user data") }}</h2>
+{%- endblock %}
+{%- block entity %}
+<style type="text/css">
+    th {
+        color: #666666;
+        font-weight: normal;
+        padding: 10px;
+        text-align: right;
+        width: 100px;
+    }
+    th:after{content: ":";}
+    .title{padding-left: 110px;}
+</style>
+
+<div id="users" class="">
+
+
+{% if user %}
+	<table cellspacing="0" class="form-table">
+	<tbody>
+        <tr>
+            <th>{{ _("user.username") }}</th>
+            <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+            <th>{{ _("user.nickname") }}</th>
+            <td>{{ user.nickname }}</td>
+        </tr>
+        <tr>
+            <th>{{ _("user.email") }}</th>
+            <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+            <th>{{ _("user.homepage") }}</th>
+            <td>{{ user.homepage }}</td>
+        </tr>
+        <tr>
+            <th>{{ _("user.avatar") }}</th>
+            <td>{{ user.avatar }}</td>
+        </tr>
+        <tr>
+            <th>{{ _("user.gender") }}</th>
+            <td>{{ _("gender_%d" % user.gender) }}</td>
+        </tr>
+        <tr>
+            <th>{{ _("user.bio") }}</th>
+            <td>{{ user.bio }}</td>
+        </tr>
+        <tr>
+            <th>{{ _("user.interest") }}</th>
+            <td>{% for data in user.interest %} {{ data }} {% endfor %}</td>
+        </tr>
+	</tbody>
+	</table>
+{%- else %}
+<p>{{ _("No data") }}</p>
+{%- endif %}
+</div>
+{%- endblock %}

@@ -1,0 +1,9 @@
+<div class="title right-pos"><strong>{{ _("Weekly hot") }}</strong></div>
+<div class="article-popular">
+    <ul class="arrow">
+    {% for entry in weekly_entries(current_category)[:20] %}
+    <li><small><a href="#">{{ entry.updated_time|timesince }}</a></small><a href="{{ url_for('portal.entry', slug=entry.slug) }}">{{ entry.title }}</a> ({{ entry.num_views }})</li>
+    {% endfor %}
+    </ul>
+</div>
+

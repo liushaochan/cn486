@@ -1,0 +1,7 @@
+    <div id="search" class="">
+        <form action="{{ url_for('portal.search') }}" id="searchform" method="get">
+
+            <input type="text" class="text" value="{{ request.args.get('q','') }}" id="q" name="q" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
+
+        </form>
+    </div>

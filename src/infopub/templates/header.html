@@ -1,0 +1,23 @@
+{% set top_menu, guide_menu = get_menu() %}
+
+
+<div id="header">
+  <div class="overwrap" id="headerbody">
+    <div class="inwrap"><a id="logo" href="/">新艺图库</a>
+      <ul id="hnav">
+        {% for menu in top_menu %}
+        <li><a class="{% if guide_menu[_(category_slug)].parent == menu %}active{% endif %}" href="/{{ menu }}.html">{{ top_menu[menu].name }}</a></li>
+        {% endfor %}
+      </ul>
+      <div id="hrnav">
+        <div id="soform">
+          <form method="get" action="http://www.uehtml.com/list/">
+            <input type="text" placeholder="关键字查找" value="" name="search"><input
+              type="submit" class="cn_icon cn_so" value=""></form>
+        </div>
+        <div id="mulogin"><a id="loginbtn" href="{{ url_for('content.login') }}">登录</a><a
+            href="http://www.uehtml.com/reg" id="muregbtn">注册</a></div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block header %}
+  {{ super() }}
+
+{% endblock %}
+{% block sub_menu %}
+
+  {{ super() }}
+
+{% endblock %}
+
+{% block content %}
+{%- for entry in data_list %}
+  <div class="tile">
+    <a href="{{ url_for('frontend.show', category_slug=category_slug, entry_slug=entry.slug) }}" target="_blank" class="thumbnail">
+    <img width="280" src="http://cdn.uehtml.com/201403/1394714885755_280x497.jpg"/>
+  </a>
+
+    <div class="title">
+      <a class="tiletitle" target="_blank" href="{{ url_for('frontend.show', category_slug=category_slug, entry_slug=entry.slug) }}">{{ entry.title }}</a>
+    </div>
+    <div class="infogroup">
+      <span class="icon icon_view"></span> 3314
+      <span class="icon icon_comment"></span>97
+      <a class="" data-postid="4701" href="http://www.uehtml.com/login"> <span class="icon icon_like"></span>45 </a>
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}

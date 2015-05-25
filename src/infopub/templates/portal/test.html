@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Simple Uploads plugin for CKEditor 4 sample</title>
+	<meta charset="utf-8">
+{#	<script type="text/javascript" src="http://www.martinezdelizarrondo.com/ckplugins/simpleuploads.demo4/ckeditor.js"></script>#}
+<script src="{{ assets('ckeditor/ckeditor.js') }}"></script>
+{#<script src="{{ assets('ckeditor/ckeditor2.js') }}"></script>#}
+  <script src="{{ assets('ckeditor/config.js') }}"></script>
+{#  <script src="{{ assets('ckeditor/lang/zh-cn.js') }}"></script>#}
+
+		<style>
+
+		/* The following styles are just to make the page look nice. */
+
+		*[contenteditable="true"]
+		{
+			padding: 10px;
+		}
+
+		#columns
+		{
+			color: #333;
+			overflow: hidden;
+			padding: 20px 0;
+		}
+
+		#columns > div
+		{
+			float: left;
+			width: 33.3%;
+		}
+
+		#columns #column1 > div
+		{
+			margin-left: 1px;
+		}
+
+		#columns #column3 > div
+		{
+			margin-right: 1px;
+		}
+
+		#columns > div > div
+		{
+			margin: 0px 10px;
+			padding: 10px 20px;
+		}
+
+		#columns blockquote
+		{
+			margin-left: 15px;
+		}
+
+		/* responsive images for inline demo */
+		img, svg, .SimpleUploadsTmpWrapper  {
+		  height: auto;
+		  max-width: 100%;
+		}
+	</style>
+</head>
+<body>
+
+
+
+
+		<p>
+			<textarea cols="80" id="editor1" name="editor1" rows="10">
+			&lt;p&gt;This is some &lt;strong&gt;sample text&lt;/strong&gt;. You are using &lt;a href="http://ckeditor.com/"&gt;CKEditor&lt;/a&gt;.&lt;br&gt;
+			Drop something here...
+			&lt;/p&gt;
+			</textarea>
+		</p>
+<script>
+
+// Apply some events to every editor that it's created on this page
+CKEDITOR.on('instanceReady', function(e) {
+	var editor = e.editor;
+
+	// When an upload starts
+	editor.on('simpleuploads.startUpload', function (e) {
+		log("Uploading " + e.data.name + ", please wait...");
+	});
+
+	// When the upload ends
+	editor.on('simpleuploads.endUpload', function (e) {
+		if (e.data.ok)
+			log("File " + e.data.name + " uploaded correctly.");
+		else
+			log("Upload of " + e.data.name + " has failed.");
+	})
+
+	// When the upload has finished (the plugin has finished and the element is ready on the page
+	editor.on( 'simpleuploads.finishedUpload' , function(ev) {
+
+		var element = ev.data.element;
+		// Add sample CSS class
+		element.addClass("picture");
+
+		// remove dimension attributes added in v 3.3.2
+		element.removeAttribute("width");
+		element.removeAttribute("height");
+	});
+
+});
+
+// Customize the toolbar of the main editor
+var config = {
+	toolbarCanCollapse : false,
+	colorButton_enableMore : false,
+  filebrowserImageUploadUrl : 'http://www.martinezdelizarrondo.com/fckeditor/editor/filemanager/connectors/php/upload.php?Type=Image',
+
+	toolbar :
+	[
+		{ name: 'document',    items : [ 'Source' ] },
+		{ name: 'clipboard',   items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+		{ name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+		{ name: 'paragraph',   items : [ 'Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'] },
+		{ name: 'colors',      items : [ 'TextColor','BGColor' ] },
+		{ name: 'insert',      items : [ 'Link', 'Image', 'addFile', 'addImage' ] },
+		{ name: 'tools',       items : [ 'Maximize', 'About' ] }
+	]
+}
+
+CKEDITOR.replace( "editor1");
+
+// Simple logger function to show on screen the usage of the basic eventsA
+function log(msg)
+{
+
+}
+</script>
+
+
+</body>
+</html>

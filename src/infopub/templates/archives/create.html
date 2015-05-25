@@ -1,0 +1,102 @@
+{% extends "archives/base.html" %}
+{% import "entry/_base.html" as lib with context %}
+{% block css %}
+  {{ super() }}
+  <style type="text/css">
+   .insertimage .top{margin-bottom: 20px;}
+  .insertimage{bottom:0;color:#777777;box-shadow:1px 2px 5px rgba(0,0,0,0.5);left:0;margin:auto;position:fixed;display: none;right:0;top:20%;z-index:9999;width:420px;height:150px;padding:10px;background-color:#fff;border:1px solid #ccc}
+  .progress{border:1px solid #DDDDDD;border-radius:3px 3px 3px 3px;padding:1px;position:relative;width:400px;display: none;}
+  .bar{background-color:#B4F5B4;border-radius:3px 3px 3px 3px;height:20px;width:0}
+  .percent{display:inline-block;left:48%;position:absolute;top:3px}
+ input[type="submit"] {
+    width: 60px;
+}
+  input{width: 100%}
+  #upImage{position: absolute;right: 16px; top:1px;}
+  #uploadimg .btn{margin-left: 200px;}
+    </style>
+
+{% endblock %}
+{% block content %}
+文章创建
+
+
+  {% call lib.form_tag(form) %}
+{#    {{ lib.render_form_fields(form, form_opts=form_opts, form_rules=form_rules) }}#}
+    {{ lib.render_form_fields(form, form_opts=form_opts) }}
+    {{ lib.render_form_buttons(return_url) }}
+  {% endcall %}
+  <div style="" class="insertimage">
+    <div class="top">
+      上传图片：
+      <button name="" class="close">X</button>
+    </div>
+    <form enctype="multipart/form-data" method="POST" action="/misc/upload_img/" id="uploadimg">
+      <input type="file" name="Filedata"><br>
+      <div class="progress">
+        <div class="bar"></div>
+        <div class="percent">0%</div>
+      </div>
+      <input class="btn btn-primary btn-large" type="submit" value="上传" style="margin-left:20px;">
+    </form>
+  </div>
+
+{% endblock %}
+
+{% block js %}
+  <script src="{{ assets('ckeditor/ckeditor.js') }}"></script>
+  <script src="{{ assets('jquery/jquery.form.js') }}"></script>
+  <script>
+
+    // Replace the <textarea id="editor"> with an CKEditor
+    // instance, using default configurations.
+    CKEDITOR.replace('content', {
+
+    });
+    $(function () {
+      //上传图片表单处理
+      var bar = $('.bar');
+      var percent = $('.percent');
+      var filedata = $('input[name="Filedata"]');
+      $('.close').click(function(){$('.insertimage').hide();});
+      $('#upImage').click(function(){$('.insertimage').show();});
+
+
+      $('#uploadimg').ajaxForm({
+        dataType: 'json',
+        beforeSend: function () {
+
+          var percentVal = '0%';
+          bar.width(percentVal);
+          percent.html(percentVal);
+        },
+        uploadProgress: function (event, position, total, percentComplete) {
+          var percentVal = percentComplete + '%';
+          bar.width(percentVal)
+          percent.html(percentVal);
+          //console.log(percentVal, position, total);
+        },
+        complete: function (xhr) {
+
+          filedata.val("");
+          bar.width('0%');
+          percent.html('0%');
+          $('.insertimage').hide();
+
+        },
+        success: function (data) {
+          $(inputId).val(data.url);
+
+        }
+
+      });
+
+
+    });
+
+  </script>
+{% endblock %}
+
+
+
+

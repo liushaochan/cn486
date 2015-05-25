@@ -1,0 +1,43 @@
+{% extends "favorites/layout.html" %}
+
+{%- block entity_data %}
+
+    {%- if favorites_list %}
+    {%- for favorites in favorites_list %}
+
+        <div id="list-{{ favorites.id }}" class="list ">
+            <h1 class="item_title"><a href="{{ url_for('portal.entry', slug=favorites.entry.slug) }}" class="">{{ favorites.title }}</a></h1>
+           <span class="small fade"> {{ favorites.description }}</span>
+           <a id="favorites_{{ favorites.id }}" href="javascript:void(0)" name="{{ url_for('favorites.cancel', id=favorites.id) }}" class="op cancel">{{ _('Cancel favorites') }}</a>
+        </div>
+
+    {% endfor %}
+    {%- else %}
+    <p>{{ _("Nobody's posted anything yet.") }}</p>
+    {%- endif %}
+
+
+{% if page_total > 1 %}
+{{ more }}
+{% endif %}
+{% endblock%}
+
+{%- block css %}
+{{ super() }}
+<link href="{{ url_for('static', filename='360/css/tip-yellow.css') }}" rel="stylesheet"/>
+
+{%- endblock %}
+
+{%- block js %}
+{{ super() }}
+<script src="{{ url_for('static', filename='360/js/lib/jquery/jquery.poshytip.min.js') }}" type="text/javascript"></script>
+<script src="{{ url_for('static', filename='60/js/lib/jquery/nfsbyajax.js') }}" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function(){
+        $(".cancel").NFSbyAjax({
+            isModifyNum:false,
+            dellist:true
+        });
+    });
+</script>
+{%- endblock %}

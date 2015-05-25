@@ -1,0 +1,196 @@
+{% extends ("layout.html") %}
+
+{%- block title -%}
+{{ current_category.meta_title }}
+{%- endblock -%}
+{% block site_description %}{{ current_category.meta_description }}{%- endblock -%}
+{% block site_keywords %}{{ current_category.meta_keywords }}{%- endblock -%}
+
+{%- block position %}
+    <ul class="breadcrumb">
+    <li><a href="{{ url_for('portal.index') }}">{{ config.SITE_NAME }}</a> </li>
+    {% if current_category %}
+    {% for p in current_category.path %}
+    <li><span class="divider">/</span><a href="{{ url_for('portal.category', category=p.slug, entry_type=17) }}" > {{ p.category_name }}  </a></li>
+    {% endfor %}
+    {% endif %}
+    {% if current_tag %}
+    <li><span class="divider">/</span>{{ _("Tags") }} » {{ current_tag.tag_name }}</li>
+    {% endif %}
+        <li class="pull-right">
+
+        {%- for category in sub_category_list -%}
+            <span class="divider"> </span>
+        <a  class="{% if current_category.id == category.id %}current{% endif %}"  href="{{ url_for('portal.category', category=category.slug, entry_type=4) }}">
+            {{ category.category_name }} ({{ category.num_entries }})
+        </a>
+        {%- endfor -%}
+
+        </li>
+    </ul>
+
+{%- endblock %}
+{%- block toppan %}
+<div class="pull-right">
+
+    <a class="btn" href="{{ url_for('feed.forum') }}">{{ _("RSS forum") }}</a>
+</div>
+{%- endblock %}
+{%- block entity %}
+
+    {%- block page_description %}{{ current_category.description|safe }}{%- endblock %}
+
+
+    <ul class="nav nav-tabs">
+        <li ><a href="{{ url_for('portal.category', category=current_category.slug, entry_type=0) }}">文章</a></li>
+        <li class="active"><a href="{{ url_for('portal.category', category=current_category.slug, entry_type=4) }}">讨论</a></li>
+        <li ><a href="{{ url_for('portal.category', category=current_category.slug, entry_type=5) }}">问答</a></li>
+        <li ><a href="{{ url_for('portal.category', category=current_category.slug, entry_type=2) }}">代码快</a></li>
+        <li ><a href="{{ url_for('portal.category', category=current_category.slug, entry_type=3) }}">开源</a></li>
+        {% if g.user %}
+        {% if current_category.post_role <= g.user.role %}
+        <a class="btn btn-warning pull-right" href="/entry/create/#{{ current_category.id }}_4">{{ _("Post forum") }}</a>
+        {% endif %}
+        {% endif %}
+    </ul>
+
+{%- if entries_list %}
+{%- for entry in entries_list %}
+    <div class="list container-fluid" id="entries-{{ entry.id }}" >
+
+        <div class="span1">
+            <a href="{{ url_for('people.index', username=entry.author.username) }}" class="">
+                <img class="img-circle img-polaroid" src="{{ entry.author.email|gravatar(size=50) }}" alt="{{ entry.author.nickname }}"/>
+            </a>
+        </div>
+
+        <div class="span11">
+        {% if entry.entry_status != 3 %}
+        <h3 class="" style="margin-right:30px; "><a href="{{ url_for('portal.entry', slug=entry.slug) }}">等待审核中......</a></h3>
+        {% else %}
+        <h3 class="" style="margin-right:30px; "><a href="{{ url_for('portal.entry', slug=entry.slug) }}">{{ entry.title }}</a></h3>
+        {% endif %}
+
+        <span class="post-data">
+
+            &nbsp;•&nbsp; <strong><a href="{{ url_for('people.index', username=entry.author.username) }}">{{ entry.author.nickname }}</a></strong> &nbsp;•&nbsp;
+            {%- if entry.published_time %}
+            <span><abbr title="{{ entry.published_time|local_datetime }}" class="time">{{ entry.published_time|timesince }}</abbr></span>
+            {%- else %}
+            <abbr title="{{ entry.updated_time|local_datetime }}" class="time">{{ entry.updated_time|timesince }}</abbr>
+            {%- endif %}
+
+        {%- if entry.last_comment_id %}
+        &nbsp;•&nbsp; 最后回复来自 <strong><a href="{% if entry.last_comment.author %}{{ url_for('people.index', username=entry.last_comment.author.username) }}{% else %}{{ entry.last_comment.homepage }}{% endif %}" rel="external nofollow">{{ entry.last_comment.nickname }}</a></strong></span>
+        {%- endif %}
+        {%- if entry.tags -%}
+        <div class="tags pull-right" >
+
+            {%- for tag in entry.tags_list -%}
+            <a href="{{ url_for('portal.tag', category=current_category.slug, tag=tag.slug) }}">{{ tag.tag_name }}</a>{{ ' ' if not loop.last }}
+            {%- endfor -%}
+        </div>
+        {% endif %}
+        <a class="count_livid" href="{{ url_for('portal.entry', slug=entry.slug) }}#comments">{{ entry.num_comments }} 回复</a>
+            </div>
+    </div>
+
+
+    {% endfor %}
+    {%- else %}
+    <p>{{ _("Nobody's posted anything yet.") }}</p>
+    {%- endif %}
+
+<div class ="inner">
+    {% if page_total > 1 %}
+    <div class="page_url">
+        {% for page_url in page_href(url_for('portal.category',category=current_category.slug), page_total, current_page) %}
+        {{ page_url|safe }}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+
+
+{%- endblock %}
+
+{%- block sidebar %}    
+<div class="box">
+    <div class="title">
+        <strong>{{ _("Hot tags") }}</strong>
+    </div>
+    <div class="teach_list">
+            {% for tag in hot_tags(current_category) %}
+        <a class="tag" href="{{ url_for('portal.tagged', slug=tag.slug) }}" title="共有{{ tag.num_entries }}个{{ tag.tag_name }}话题">{{ tag.tag_name }}</a>
+    {% endfor %}
+    </div>
+</div>
+<div class="spacing"></div>
+<div class="box">
+    <div class="title">
+        <strong>{{ _("Weekly hot") }}</strong>
+    </div>
+    <div class="teach_list">
+    <ul class="unstyled">
+        {% for entry in weekly_entries(current_category)[:20] %}
+        <li><i class="icon-fire trans"></i><small>{{ entry.updated_time|timesince }}</small><a href="{{ url_for('portal.entry', slug=entry.slug) }}">{{ entry.title }}</a> ({{ entry.num_views }})</li>
+        {% endfor %}
+    </ul>
+    </div>
+</div>
+<div class="spacing"></div>
+<div class="box">
+    <div class="title">
+        <strong>{{ _("Monthly hot") }}</strong>
+    </div>
+    <div class="teach_list">
+    <ul class="unstyled">
+        {% for entry in monthly_entries(current_category)[:20] %}
+        <li><i class="icon-fire trans"></i><small>{{ entry.updated_time|timesince }}</small><a href="{{ url_for('portal.entry', slug=entry.slug) }}">{{ entry.title }}</a> ({{ entry.num_views }})</li>
+        {% endfor %}
+    </ul>
+    </div>
+</div>
+<div class="box">
+    <div class="title">
+        <strong>{{ _("Latest Comments") }}</strong>
+    </div>
+    <div class="teach_list">
+      {% if latest_comments %}
+            <table border="0" width="100%">
+                {% for comment in latest_comments %}
+                <tr class="clear" style="border-bottom: 1px dotted #ccc;">
+                    <td width="27" align="center" valign="top">
+                        <a href="{{ url_for('people.index', username=comment.username) }}" class="left" style="margin: 5px;">
+                            <img class="small-avatar" src="{{ comment.email|gravatar(size=24) }}" alt="{{ comment.nickname }}"/>
+                        </a>
+                    </td>
+                    <td valign="middle" >
+                        <a href="{{ url_for('portal.entry', slug=comment.entry.slug) }}#comment-{{ comment.id }}">{{ comment.comment|html_to_text }}</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+</div>
+{%- endblock %}
+{%- block js %}
+{{ super() }}
+<script src="{{ url_for('static', filename='360/js/lib/jquery/nfsbyajax.js') }}" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    $(function(){
+        $(".nfs").NFSbyAjax({isModifyNum:false});
+    });
+
+
+
+
+</script>
+
+
+
+
+{%- endblock %}

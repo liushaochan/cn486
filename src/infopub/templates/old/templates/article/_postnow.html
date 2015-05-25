@@ -1,0 +1,8 @@
+<div class="pull-right">
+    {% if g.user %}
+    {% if current_category.post_role <= g.user.role %}
+    <a class="btn btn-warning" href="/entry/create/#{{ current_category.id }}_0">{{ _("Post article") }}</a>
+    {% endif %}
+    {% endif %}
+    <a class="btn" href="{{ url_for('feed.article') }}">{{ _("RSS article") }}</a>
+</div>
